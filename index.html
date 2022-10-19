@@ -1,38 +1,291 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>Spec proposal</title>
-    <script src="https://www.w3.org/Tools/respec/respec-w3c" class="remove"></script>
-    <script class='remove'>
-      // See https://github.com/w3c/respec/wiki/ for how to configure ReSpec
-      var respecConfig = {
-        specStatus: "CG-DRAFT",
-        shortName: "rch-explainer",
-        editors: [{
-          name: "Pierre-Antoine Champin"
-        }]
-      };
-    </script>
-  </head>
-  <body>
-    <section id="abstract">
-      <p>
-        This specification does neat stuff.
-      </p>
-    </section>
-    <section id="sotd">
-      <p>
-        This is an unofficial proposal.
-      </p>
-    </section>
+<!DOCTYPE html>
+<html>
 
-    <section id="introduction">
-      <h2>Introduction</h2>
+<head>
+  <meta charset="utf-8" />
+  <title>RDF Dataset Canonicalization and Hash Working Group Charter &mdash; Explainer and Use Cases</title>
+  <script src="https://www.w3.org/Tools/respec/respec-w3c" class="remove" defer></script>
+  <script class="remove">
+// All config options at https://respec.org/docs/
+var respecConfig = {
+  specStatus: "base",
+  edDraftURI: "https://w3c.github.io/rch-wg-charter/explainer.html",
+  editors: [{
+    name: "Ivan Herman",
+    url: "https://www.w3.org/People/Ivan/",
+    company: "W3C",
+    w3cid: 7382,
+    orcid: "0000-0003-0782-2704",
+    companyURL: "https://www.w3.org",
+  }, {
+    name: "Manu Sporny",
+    url: "http://manu.sporny.org/",
+    company: "Digital Bazaar",
+    companyURL: "https://digitalbazaar.com/",
+    w3cid: 41758
+  }, {
+    name: "Aidan Hogan",
+    url: "http://aidanhogan.com/",
+    company: "DCC, Universidad de Chile",
+    companyURL: "https://www.dcc.uchile.cl/",
+    orcid: "0000-0001-9482-1982"
+  }],
+  github: "w3c/rch-wg-charter",
+  localBiblio: {
+    "carroll-2003" : {
+      title: "Signing RDF Graphs",
+      authors: [
+        "Jeremy J. Carroll"
+      ],
+      href : "https://link.springer.com/chapter/10.1007/978-3-540-39718-2_24",
+      publisher: "International Semantic Web Conference — ISWC 2003, Springer Verlag, pp 369-384",
+      rawDate : "2003"
+    },
+    "kasten-et-al-2014": {
+      title: "A Framework for Iterative Signing of Graph Data on the Web",
+      authors: [
+        "Andreas Kasten",
+        "Ansgar Scherp",
+        "Peter Schauß"
+      ],
+      href : "https://link.springer.com/chapter/10.1007%2F978-3-319-07443-6_11",
+      publisher: "European Semantic Web Conference — ESWC 2014, Springer Verlag, pp. 146-160",
+      rawDate : "2014"
+    },
+    "hogan-2017" : {
+      title: "Canonical Forms for Isomorphic and Equivalent RDF Graphs: Algorithms for Leaning and Labelling Blank Nodes",
+      authors: [
+        "Aidan Hogan"
+      ],
+      href : "http://aidanhogan.com/docs/rdf-canonicalisation.pdf",
+      publisher: "ACM Transactions on the Web, vol. 11, no. 4, pp. 22:1-22:62",
+      rawDate : "2017"
+    },
+    "arnold-longley-2020": {
+      title: "RDF Dataset Normalization",
+      authors : [
+        "Rachel Arnold",
+        "Dave Longley"
+      ],
+      href: "https://lists.w3.org/Archives/Public/public-credentials/2021Mar/att-0220/RDFDatasetCanonicalization-2020-10-09.pdf",
+      status: "Report submitted to the W3C Credentials Community Group mailing list",
+      rawDate : "2020-10-09"
+    }
+  }
+};
+  </script>
+  <style>
+.issue {
+  background: teal !important;
+  color: #FFC !important ;
+}
+
+.issue::before {
+  content: "\2009";
+}
+
+.issue::after {
+  content: "\2009";
+}
+
+.todo {
+  color: #900 !important;
+  background-color: #FFC !important;
+}
+
+.rdf {
+  font-style: italic;
+  font-family: cursive;
+}
+  </style>
+</head>
+
+<body>
+  <section id="abstract">
+    <p>
+      This is a supporting document for the proposed <a href="index.html">RDF Dataset Canonicalization and Hash Working Group Charter</a>, providing some extra explanation of the problem space and associated use cases.
+    </p>
+  </section>
+
+  <section id='canonicalize'>
+    <h2>Terminology</h2>
+
+  <section>
+    <h2>Canonicalization terminology</h2>
+
+    <p>
+      For a precise definition of the various terms and concepts, the reader should refer to the formal RDF specification [[rdf11-concepts]].
+    </p>
+
+    <dl>
+      <dt id='dataset'>RDF Datasets</dt>
+      <dd>
+        <p>
+          <span class='rdf'>R</span>, <span class='rdf'>R'</span> and <span class='rdf'>S</span> each denote an <a href="https://www.w3.org/TR/rdf11-concepts/#section-dataset">RDF Dataset</a> [[rdf11-concepts]].
+        </p>
+      </dd>
+
+      <dt id='identical'>Identical RDF Datasets</dt>
+      <dd>
+        <p>
+          <span class='rdf'>R = S</span> denotes that <span class='rdf'>R</span> and <span class='rdf'>S</span> are <em>identical</em> RDF Datasets. 
+        </p>
+        <p>
+          Two RDF Datasets are identical if and only if they have the same <a href="https://www.w3.org/TR/rdf11-concepts/#section-dataset">default graph</a> (under set equality) and the same set of <a href="https://www.w3.org/TR/rdf11-concepts/#section-dataset">named graphs</a> (under set equality). </p>
+         <p>
+          If <span class='rdf'>R</span> and <span class='rdf'>S</span> are identical, we may equivalently say that they are the <em>same</em> RDF Dataset. 
+        </p>
+      </dd>
+
+      <dt id='isomorphic'>Isomorphic RDF Datasets</dt>
+      <dd>
+        <p>
+          <span class='rdf'>R ≈ S</span> denotes that <span class='rdf'>R</span> and <span class='rdf'>S</span> are <a href='https://www.w3.org/TR/rdf11-concepts/#section-dataset-isomorphism'><em>isomorphic</em></a> RDF Datasets. 
+        </p>
+        <p>
+          In particular, <span class='rdf'>R</span> is isomorphic with <span class='rdf'>S</span>&thinsp; if and only if it is possible to map (i.e., relabel) the blank nodes of <span class='rdf'>R</span> to the blank nodes of <span class='rdf'>S</span>&thinsp; in a one-to-one manner, generating an RDF dataset <span class='rdf'>R'</span>&thinsp; such that <span class='rdf'>R' = S</span>.
+        </p>
+      </dd>
+      
+      <dt id='canonicalization'>RDF Dataset Canonicalization</dt>
+      <dd>
+        <p>
+          RDF Dataset Canonicalization is a function <span class='rdf'>C</span>&thinsp; that maps an RDF Dataset to an RDF Dataset in a manner that satisfies the following two properties for all RDF Datasets <span class='rdf'>R</span> and <span class='rdf'>S</span>:
+        </p>
+        <ul>
+          <li> <span class='rdf'>R ≈ C(R)</span>&thinsp;; and</li> 
+          <li> <span class='rdf'>C(R) = C(S)</span>&thinsp; if and only if <span class='rdf'>R ≈ S</span>.</li>
+        </ul>
+        <p id="canonical_form">
+          We may refer to <span class='rdf'>C(R)</span> as the <em>canonical form</em> of <span class='rdf'>R</span> (under <span class='rdf'>C</span>&nbsp;).
+        </p>
+        <p>
+          Such a canonicalization function can be implemented, in practice, as a procedure that deterministically labels all blank nodes of an RDF Dataset in a one-to-one manner, without depending on any feature of the input serialization (blank node labels, order of the triples, etc.) of the input RDF Dataset.
+        </p>
+      </dd>
+    </dl>
+
+    <div class=note id=abstract_concept>
       <p>
-        See <a href="https://github.com/w3c/respec/wiki/User's-Guide">ReSpec's user guide</a>
-        for how toget started!
+        It is important to emphasize that the term “canonicalization” is used here in its very generic form, described as:
+      </p>
+
+      <blockquote>
+        In computer science, <b>canonicalization</b> […] is a process for converting data that has more than one possible representation into a “standard”, “normal”, or canonical form. <br> Source: <a href="https://en.wikipedia.org/wiki/Canonicalization">Wikipedia</a>.
+      </blockquote>
+
+      <p>
+        Canonicalization, as used in the context of this document and the proposed charter, is indeed defined on <em>an abstract data model</em> (i.e., on <a href="https://www.w3.org/TR/rdf11-concepts/#section-dataset">RDF Dataset</a> [[rdf11-concepts]]), regardless of a specific serialization. (It could also be referred to as a “canonical labelling scheme”).
+        It is therefore very different from the usage of the term in, for example, the “Canonical XML”&nbsp;[[xml-c14n11]] or the “JSON Canonicalization Scheme”&nbsp;[[rfc8785]] specifications which are, essentially, syntactic transformations of the respective documents. 
+        Any comparison with those documents can be misleading.
+      </p>
+
+
+    </div>
+
+    <section id="generalProblem">
+      <h2>The General Problem Space</h2>
+      <p>
+        Though canonical labeling procedures for directed and undirected graphs have been studied for several decades, only in the past 10 years have two generalized and comprehensive approaches been proposed for RDF Graphs and RDF Datasets:
+      </p>
+
+      <ol>
+        <li>
+          Algorithms for signing RDF data have been proposed in [[carroll-2003]] and [[kasten-et-al-2014]], both reviewed through the anonymous scholarly peer review process. However, these approaches are not sound and complete with respect to isomorphism.
+        </li>
+        <li>
+          The algorithms defined by Aidan Hogan in [[hogan-2017]], reviewed through the anonymous scholarly peer review process, and also implemented by the author.
+        </li>
+        <li>
+          The algorithm defined by Rachel Arnold and Dave Longley, see [[arnold-longley-2020]], <a href="https://lists.w3.org/Archives/Public/public-credentials/2021Apr/att-0032/Mirabolic_Graph_Iso_Report_2020_10_19.pdf">reviewed</a> by <a href="https://lists.w3.org/Archives/Public/public-credentials/2021Apr/0032.html">experts at Mirabolic Consulting</a>, implemented and deployed via, e.g., the <a href="https://github.com/digitalbazaar/jsonld-signatures">JSON-LD Signatures package</a> used in several JSON-LD Signature suites.
+        </li>
+      </ol>
+
+      <p>
+        The introduction of <a href="http://aidanhogan.com/docs/rdf-canonicalisation.pdf">Aidan Hogan’s paper</a>&nbsp;[[hogan-2017]] also contains a more thorough description of the underlying mathematical challenges.
       </p>
     </section>
-  </body>
+    
+  </section>
+  </section>
+
+  <section id="goals">
+    <h2>Defining an RDF Dataset Hash</h2>
+
+    <p>
+      One possible approach to calculating the hash of an RDF Dataset <span class='rdf'>R</span> may imply the following steps:
+    </p>
+
+    <ol>
+      <li>
+        use an <a href="#canonicalization">RDF Dataset Canonicalization</a> function <span class='rdf'>C</span> to calculate <span class='rdf'>C(R)</span>;
+      </li>
+      <li>
+        serialize <span class='rdf'>C(R)</span> to quads&nbsp;[[n-quads]] and sort the resulting set of quads;
+      </li>
+      <li id=hash>
+        apply a (traditional) hashing function <span class='rdf'>h</span> on the result of the serialization to yield <span class='rdf'>h(R)</span>&thinsp;; this can be considered as the cryptographic hash of the Dataset.
+      </li>
+     </ol>
+     <p>
+       The second step, i.e., the sorting of the serialized dataset in quads, also requires the specification of what could be considered as a “canonical” version of N-Quads [[n-quads]] files (handling of white spaces, specifying the exact sorting algorithms to be used, canonical representation of datatype literals, etc.). Considering the simplicity of the N-Quads format, this does not necessitate a significant specification effort, but has a value in its own right. That being said, there may be other approaches to define a hash that do not necessarily involve a sorted N-Quads representation: the Working Group will have to determine the best approach.
+     </p>
+
+
+    <p>
+      The main challenge for the Working Group is to provide a standard for the <a href="#canonicalization">RDF Dataset Canonicalization function</a>. 
+    </p>
+
+    <div id="noProblem" class=note>
+      <p>When the hash of a file is transferred from one system to another and the file is used <em>as is</em>, there is no need for any processing other than checking the value of the hash of the file. This is true for RDF just as for any other data formats; this means that any existing hashing functions may be used on the original file. However, RDF has many serializations for datasets, notably <a href="https://www.w3.org/TR/trig/">TriG</a>, <a href="https://www.w3.org/TR/json-ld/">JSON-LD</a>, <a href="https://www.w3.org/TR/n-quads/">N-Quads</a> or, informally, <a href="https://digitalbazaar.github.io/cbor-ld-spec/">CBOR-LD</a>. The <a href="#spaceEfficient">space efficient verification</a> use case points to a need in some circumstances to transform &mdash; usually to minimize &mdash; the data that is transferred. In this scenario, a hash on the original file, such as a hash calculated on a JSON-LD file, is not appropriate, as the conversion will make it invalid. A hash of the abstract dataset, on the other hand, will still be valid.</p>
+    </div>
+  </section>
+
+  <section id=usage>
+    <h2>Use Cases and Requirements</h2>
+
+    <p>
+      Some typical use cases for RDF Dataset Canonicalization and/or signatures are:
+    </p>
+
+    <dl>
+      <dt id="detectingChanges">Detecting changes in Datasets</dt>
+      <dd>
+        When processing RDF Datasets over a period of time, determining if information has changed is helpful. For example, knowing if information has changed helps with data cache invalidation, detecting if expected data has been tampered with or modified, or when debugging unexpected changes in source RDF Datasets.
+      </dd>
+
+      <dt id="spaceEfficient">Space-efficient verification of the contents of Datasets</dt>
+      <dd>
+        If unique identification of RDF Datasets is possible, one can cryptographically hash the information to establish a storage-efficient way to verify that the information has not changed over time. One property of cryptographic hash is that one can verify data integrity. For example, a small device sending an RDF Dataset to a remote storage location can compute a cryptographic hash for later use in verifying that all the data arrived intact and has not been tampered with. 
+        <br>(Contributed by <a href="https://alanhkarp.com/">Alan Karp.)</a>
+      </dd>
+
+      <dt id="secretConfirmation">Secret confirmation of the contents of Datasets</dt>
+      <dd>
+        Since a cryptographic hash is a one-way function, and serves as an abbreviation for the entire RDF Dataset, one can use it in places where secrecy is desired. For example, when ensuring that the transaction history on a distributed ledger is the same between two services, two systems could keep track of the list of transactions in their respective ledgers. Canonicalizing and cryptographically hashing the list of transactions should result in the same cryptographic hash without either party needing to share the list of transactions with the other. 
+        <br>(Contributed by <a href="https://alanhkarp.com/">Alan Karp.)</a>
+      </dd>
+
+      <dt id="dSig">
+        Annotating Datasets with digital signatures and other digital proofs
+      </dt>
+      <dd>
+        When publishing or transmitting an RDF Dataset, clearly articulating the entity that published the data and protecting it from undetected modification is useful for mission critical systems. For example, understanding the issuer of a Verifiable Credential and ensuring that it is evident when a Verifiable Presentation has been tampered with underlies the trustworthiness of the encoded information. This process can go through the calculation of the hash of the Verifiable Credential represented as an RDF Dataset, and use some standard cryptographic signature method to ensure the integrity of the hash value.
+      </dd>
+
+      <dt id="skolem">
+        Generating canonical Skolem IRIs for blank nodes
+      </dt>
+      <dd>
+        <a href="https://www.w3.org/TR/rdf11-concepts/#section-skolemization">Skolem IRIs</a> have been proposed in RDF 1.1 as a way to replace blank nodes with IRIs in application scenarios where it is preferable to avoid the use of blank nodes. Rather than using an ad hoc scheme to generate Skolem IRIs to replace blank nodes, an alternative is to generate Skolem IRIs in a deterministic manner, such that compliant implementations will generate the same IRIs to replace the same blank nodes in isomorphic copies of an RDF graph or dataset. Such a procedure will produce a canonical version of a Skolemized RDF graph or dataset that can then be used in the context of several of the use-cases mentioned previously.
+      </dd>
+
+      <dt id="semanticConsistency">Semantic consistency of multi-part datasets</dt>
+      <dd>The <a href="#detectingChanges">change detection</a> and <a href="#spaceEfficient">space-efficient verification</a> use-cases above can be leveraged in situations where a graph or dataset semantically relies on one or several other graph(s), which it refers to through links. Attaching cryptographic hashes to these links would enable the verification of the overall integrity of the set of interconnected graphs. One such example is the <a href="https://www.w3.org/TR/owl2-primer/#a_imports">import mechanism of OWL</a>: the ontology consumer may wish to verify that the imported ontology is the same as the one used by the author of the importing ontology, otherwise the resulting inferences may differ. Another such example is an <a href="https://www.w3.org/TR/EARL10-Schema/">EARL test report</a>: the consumer may wish to ensure that the test description pointed to by the report is the one that was actually used for the test.
+      </dd>
+    </dl>
+  </section>
+
+</body>
+
 </html>
