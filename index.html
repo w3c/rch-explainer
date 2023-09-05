@@ -3,13 +3,14 @@
 
 <head>
   <meta charset="utf-8" />
-  <title>RDF Dataset Canonicalization and Hash Working Group Charter &mdash; Explainer and Use Cases</title>
+  <title>RDF Dataset Canonicalization and Hash Explainer and Use Cases</title>
   <script src="https://www.w3.org/Tools/respec/respec-w3c" class="remove" defer></script>
   <script class="remove">
 // All config options at https://respec.org/docs/
 var respecConfig = {
-  specStatus: "base",
-  edDraftURI: "https://w3c.github.io/rch-wg-charter/explainer.html",
+  specStatus: "NOTE",
+  group: 'rch',
+  edDraftURI: "https://w3c.github.io/rch-explainer/",
   editors: [{
     name: "Ivan Herman",
     url: "https://www.w3.org/People/Ivan/",
@@ -29,8 +30,13 @@ var respecConfig = {
     company: "DCC, Universidad de Chile",
     companyURL: "https://www.dcc.uchile.cl/",
     orcid: "0000-0001-9482-1982"
+  },{
+    name: "Phil Archer",
+    url: "https://philarcher.org/",
+    company: "GS1",
+    companyURL: "https://www.gs1.org/"
   }],
-  github: "w3c/rch-wg-charter",
+  github: "/w3c/rch-explainer",
   localBiblio: {
     "carroll-2003" : {
       title: "Signing RDF Graphs",
@@ -70,6 +76,19 @@ var respecConfig = {
       href: "https://lists.w3.org/Archives/Public/public-credentials/2021Mar/att-0220/RDFDatasetCanonicalization-2020-10-09.pdf",
       status: "Report submitted to the W3C Credentials Community Group mailing list",
       rawDate : "2020-10-09"
+    },
+    "CCG-RDC-FINAL": {
+      id: "CCG-RDC-FINAL",
+      title: "RDF Dataset Canonicalization",
+      authors: ["Dave Longley"],
+      editors: [
+        "Dave Longley",
+        "Manu Sporny"
+      ],
+      date: "October 9, 2022",
+      href: "https://www.w3.org/community/reports/credentials/CG-FINAL-rdf-dataset-canonicalization-20221009/",
+      status: "CG-FINAL",
+      publisher: "W3C"
     }
   }
 };
@@ -103,15 +122,13 @@ var respecConfig = {
 <body>
   <section id="abstract">
     <p>
-      This is a supporting document for the proposed <a href="index.html">RDF Dataset Canonicalization and Hash Working Group Charter</a>, providing some extra explanation of the problem space and associated use cases.
+      This is a supporting document for RDF Dataset Canonicalization, providing some extra explanation of the problem space and associated use cases.
     </p>
   </section>
+  <section id="sotd"><p>This document is an updated version of the <a href="https://www.w3.org/2022/07/rch-wg-charter/explainer.html">original explainer document</a> that supported the original chartering of the working group.</p></section>
 
   <section id='canonicalize'>
     <h2>Terminology</h2>
-
-  <section>
-    <h2>Canonicalization terminology</h2>
 
     <p>
       For a precise definition of the various terms and concepts, the reader should refer to the formal RDF specification [[rdf11-concepts]].
@@ -128,7 +145,7 @@ var respecConfig = {
       <dt id='identical'>Identical RDF Datasets</dt>
       <dd>
         <p>
-          <span class='rdf'>R = S</span> denotes that <span class='rdf'>R</span> and <span class='rdf'>S</span> are <em>identical</em> RDF Datasets. 
+          <span class='rdf'>R = S</span> denotes that <span class='rdf'>R</span> and <span class='rdf'>S</span> are <em>identical</em> RDF Datasets. 
         </p>
         <p>
           Two RDF Datasets are identical if and only if they have the same <a href="https://www.w3.org/TR/rdf11-concepts/#section-dataset">default graph</a> (under set equality) and the same set of <a href="https://www.w3.org/TR/rdf11-concepts/#section-dataset">named graphs</a> (under set equality). </p>
@@ -175,13 +192,12 @@ var respecConfig = {
       </blockquote>
 
       <p>
-        Canonicalization, as used in the context of this document and the proposed charter, is indeed defined on <em>an abstract data model</em> (i.e., on <a href="https://www.w3.org/TR/rdf11-concepts/#section-dataset">RDF Dataset</a> [[rdf11-concepts]]), regardless of a specific serialization. (It could also be referred to as a “canonical labelling scheme”).
-        It is therefore very different from the usage of the term in, for example, the “Canonical XML”&nbsp;[[xml-c14n11]] or the “JSON Canonicalization Scheme”&nbsp;[[rfc8785]] specifications which are, essentially, syntactic transformations of the respective documents. 
-        Any comparison with those documents can be misleading.
+        Canonicalization, as used in the context of this document, is defined on <em>an abstract data model</em> (i.e., on an <a href="https://www.w3.org/TR/rdf11-concepts/#section-dataset">RDF Dataset</a> [[rdf11-concepts]]), regardless of a specific serialization. (It could also be referred to as a “canonical labelling scheme”).
+        It is therefore very different from the usage of the term in, for example, the “Canonical XML” [[xml-c14n11]] or the “JSON Canonicalization Scheme” [[rfc8785]] specifications which are, essentially, syntactic transformations of the respective documents. Any comparison with those documents can be misleading.
       </p>
 
 
-    </div>
+    </div></section>
 
     <section id="generalProblem">
       <h2>The General Problem Space</h2>
@@ -205,8 +221,7 @@ var respecConfig = {
         The introduction of <a href="http://aidanhogan.com/docs/rdf-canonicalisation.pdf">Aidan Hogan’s paper</a>&nbsp;[[hogan-2017]] also contains a more thorough description of the underlying mathematical challenges.
       </p>
     </section>
-    
-  </section>
+
   </section>
 
   <section id="goals">
@@ -227,20 +242,27 @@ var respecConfig = {
         apply a (traditional) hashing function <span class='rdf'>h</span> on the result of the serialization to yield <span class='rdf'>h(R)</span>&thinsp;; this can be considered as the cryptographic hash of the Dataset.
       </li>
      </ol>
-     <p>
+     <!--<p>
        The second step, i.e., the sorting of the serialized dataset in quads, also requires the specification of what could be considered as a “canonical” version of N-Quads [[n-quads]] files (handling of white spaces, specifying the exact sorting algorithms to be used, canonical representation of datatype literals, etc.). Considering the simplicity of the N-Quads format, this does not necessitate a significant specification effort, but has a value in its own right. That being said, there may be other approaches to define a hash that do not necessarily involve a sorted N-Quads representation: the Working Group will have to determine the best approach.
-     </p>
+     </p>-->
 
 
     <p>
-      The main challenge for the Working Group is to provide a standard for the <a href="#canonicalization">RDF Dataset Canonicalization function</a>. 
+      The main challenge for the Working Group was to provide a standard for the <a href="#canonicalization">RDF Dataset Canonicalization function</a>. 
     </p>
 
     <div id="noProblem" class=note>
       <p>When the hash of a file is transferred from one system to another and the file is used <em>as is</em>, there is no need for any processing other than checking the value of the hash of the file. This is true for RDF just as for any other data formats; this means that any existing hashing functions may be used on the original file. However, RDF has many serializations for datasets, notably <a href="https://www.w3.org/TR/trig/">TriG</a>, <a href="https://www.w3.org/TR/json-ld/">JSON-LD</a>, <a href="https://www.w3.org/TR/n-quads/">N-Quads</a> or, informally, <a href="https://digitalbazaar.github.io/cbor-ld-spec/">CBOR-LD</a>. The <a href="#spaceEfficient">space efficient verification</a> use case points to a need in some circumstances to transform &mdash; usually to minimize &mdash; the data that is transferred. In this scenario, a hash on the original file, such as a hash calculated on a JSON-LD file, is not appropriate, as the conversion will make it invalid. A hash of the abstract dataset, on the other hand, will still be valid.</p>
     </div>
-  </section>
+<p>
+</section>
+<section id="specDevelopment"><h2>Development of the specification</h2>
+The working group considered the algorithms proposed by Aidan Hogan [[hogan-2017]] and by Rachel Arnold and Dave Longley [[arnold-longley-2020]]. The latter was the basis for the final report on the topic published by the <a href="https://www.w3.org/community/credentials/">Credentials Community Group</a> [[CCG-RDC-FINAL]]. It was largely through that effort that the Arnold/Longley approach enjoyed significant implementation experience before the working group was chartered, backed up by a test suite. It was for this reason that, after careful consideration of the alternatives, efforts focused on formalizing the Arnold/Longley approach.</p>
+<p>A major issue that the working group had to tackle was precisely what would the serialized output of the algorithm be that could then be hashed? The current  N-Triples Recommendation [[n-triples-20140225]] includes the definition of a <a href="https://www.w3.org/TR/n-triples/#canonical-ntriples">canonical form</a>. However, the same is not true for N-Quads [[n-quads-20140225]]. This is expected to be added to a forthcoming version of the N-Quads specification but, for now, normative text is included in the RDF Dataset Canonicalization document. It is necessary to serialize the algorithm output as N-Quads, rather than N-Triples, as the input and output are RDF Datasets, which may include multiple graphs.</p>
+<p>On a related issue, the RDF Dataset Canonicalization specification includes an important note about the canonical form of literals, especially language tags.</p>
 
+  </section>
+  
   <section id=usage>
     <h2>Use Cases and Requirements</h2>
 
@@ -270,7 +292,7 @@ var respecConfig = {
         Annotating Datasets with digital signatures and other digital proofs
       </dt>
       <dd>
-        When publishing or transmitting an RDF Dataset, clearly articulating the entity that published the data and protecting it from undetected modification is useful for mission critical systems. For example, understanding the issuer of a Verifiable Credential and ensuring that it is evident when a Verifiable Presentation has been tampered with underlies the trustworthiness of the encoded information. This process can go through the calculation of the hash of the Verifiable Credential represented as an RDF Dataset, and use some standard cryptographic signature method to ensure the integrity of the hash value.
+        When publishing or transmitting an RDF Dataset, clearly articulating the entity that published the data and protecting it from undetected modification is useful for mission critical systems. For example, understanding the issuer of a <a href="https://www.w3.org/TR/vc-data-model/#what-is-a-verifiable-credential">Verifiable Credential</a> and ensuring that it is evident when a <a href="https://www.w3.org/TR/vc-data-model/#dfn-verifiable-presentations">Verifiable Presentation</a> has been tampered with underlies the trustworthiness of the encoded information. This process can go through the calculation of the hash of the Verifiable Credential represented as an RDF Dataset and use some standard cryptographic signature method to ensure the integrity of the hash value.
       </dd>
 
       <dt id="skolem">
