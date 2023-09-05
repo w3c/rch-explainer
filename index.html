@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
   <meta charset="utf-8" />
@@ -222,9 +222,7 @@ var respecConfig = {
       </p>
     </section>
 
-  </section>
-
-  <section id="goals">
+    <section id="goals">
     <h2>Defining an RDF Dataset Hash</h2>
 
     <p>
@@ -251,13 +249,21 @@ var respecConfig = {
       The main challenge for the Working Group was to provide a standard for the <a href="#canonicalization">RDF Dataset Canonicalization function</a>. 
     </p>
 
+    <p class="note">The immediate result of the <a data-cite="RDF-CANON#canonicalization">Canonicalization Algorithm</a> is a canonical representation of the RDF dataset represented as N-Quads, using canonical blank node identifiers, and placed in code point order.
+      As the media type for N-Quads is defined in [[[n-quads]]] [[n-quads]] as `application/n-quads` no further media registration is needed for this form.
+      An alternate output of the Canonicalization Algorithm
+      is the <a data-cite="RDF-CANON#dfn-issued-identifiers-map">issued identifiers map</a>, which may be represnted as JSON [[RFC8259]].</p>
+
+    <p class="note">
+      The <a data-cite="RDF-CANON#canonicalization">Canonicalization Algorithm</a> operates over <a data-cite="RDF-CANON#dfn-quad">RDF quads</a>, rather than canonicalizing each <a data-cite="RDF11-CONCEPTS#dfn-rdf-graph">RDF graph</a> contained within a dataset seprately. This is necessary as blank nodes may be shared between graphs within an RDF dataset, or be used as the graph name for a named graph within the dataset, thus it is important that the full context of each blank node is considered when assigning canonical identifiers.</p>
+
     <div id="noProblem" class=note>
       <p>When the hash of a file is transferred from one system to another and the file is used <em>as is</em>, there is no need for any processing other than checking the value of the hash of the file. This is true for RDF just as for any other data formats; this means that any existing hashing functions may be used on the original file. However, RDF has many serializations for datasets, notably <a href="https://www.w3.org/TR/trig/">TriG</a>, <a href="https://www.w3.org/TR/json-ld/">JSON-LD</a>, <a href="https://www.w3.org/TR/n-quads/">N-Quads</a> or, informally, <a href="https://digitalbazaar.github.io/cbor-ld-spec/">CBOR-LD</a>. The <a href="#spaceEfficient">space efficient verification</a> use case points to a need in some circumstances to transform &mdash; usually to minimize &mdash; the data that is transferred. In this scenario, a hash on the original file, such as a hash calculated on a JSON-LD file, is not appropriate, as the conversion will make it invalid. A hash of the abstract dataset, on the other hand, will still be valid.</p>
     </div>
 <p>
 </section>
 <section id="specDevelopment"><h2>Development of the specification</h2>
-The working group considered the algorithms proposed by Aidan Hogan [[hogan-2017]] and by Rachel Arnold and Dave Longley [[arnold-longley-2020]]. The latter was the basis for the final report on the topic published by the <a href="https://www.w3.org/community/credentials/">Credentials Community Group</a> [[CCG-RDC-FINAL]]. It was largely through that effort that the Arnold/Longley approach enjoyed significant implementation experience before the working group was chartered, backed up by a test suite. It was for this reason that, after careful consideration of the alternatives, efforts focused on formalizing the Arnold/Longley approach.</p>
+<p>The working group considered the algorithms proposed by Aidan Hogan [[hogan-2017]] and by Rachel Arnold and Dave Longley [[arnold-longley-2020]]. The latter was the basis for the final report on the topic published by the <a href="https://www.w3.org/community/credentials/">Credentials Community Group</a> [[CCG-RDC-FINAL]]. It was largely through that effort that the Arnold/Longley approach enjoyed significant implementation experience before the working group was chartered, backed up by a test suite. It was for this reason that, after careful consideration of the alternatives, efforts focused on formalizing the Arnold/Longley approach.</p>
 <p>A major issue that the working group had to tackle was precisely what would the serialized output of the algorithm be that could then be hashed? The current  N-Triples Recommendation [[n-triples-20140225]] includes the definition of a <a href="https://www.w3.org/TR/n-triples/#canonical-ntriples">canonical form</a>. However, the same is not true for N-Quads [[n-quads-20140225]]. This is expected to be added to a forthcoming version of the N-Quads specification but, for now, normative text is included in the RDF Dataset Canonicalization document. It is necessary to serialize the algorithm output as N-Quads, rather than N-Triples, as the input and output are RDF Datasets, which may include multiple graphs.</p>
 <p>On a related issue, the RDF Dataset Canonicalization specification includes an important note about the canonical form of literals, especially language tags.</p>
 
