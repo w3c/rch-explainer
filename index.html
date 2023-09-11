@@ -256,7 +256,7 @@ var respecConfig = {
     </div>
 <p>
 </section>
-<section id="specDevelopment"><h2>Development of the specification</h2>
+<section id="specDevelopment"><h2>Development of the Specification</h2>
 The working group considered the algorithms proposed by Aidan Hogan [[hogan-2017]] and by Rachel Arnold and Dave Longley [[arnold-longley-2020]]. The latter was the basis for the final report on the topic published by the <a href="https://www.w3.org/community/credentials/">Credentials Community Group</a> [[CCG-RDC-FINAL]]. It was largely through that effort that the Arnold/Longley approach enjoyed significant implementation experience before the working group was chartered, backed up by a test suite. It was for this reason that, after careful consideration of the alternatives, efforts focused on formalizing the Arnold/Longley approach.</p>
 <p>A major issue that the working group had to tackle was precisely what would the serialized output of the algorithm be that could then be hashed? The current  N-Triples Recommendation [[n-triples-20140225]] includes the definition of a <a href="https://www.w3.org/TR/n-triples/#canonical-ntriples">canonical form</a>. However, the same is not true for N-Quads [[n-quads-20140225]]. This is expected to be added to a forthcoming version of the N-Quads specification but, for now, normative text is included in the RDF Dataset Canonicalization document. It is necessary to serialize the algorithm output as N-Quads, rather than N-Triples, as the input and output are RDF Datasets, which may include multiple graphs.</p>
 <p>On a related issue, the RDF Dataset Canonicalization specification includes an important note about the canonical form of literals, especially language tags.</p>
