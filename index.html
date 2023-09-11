@@ -252,7 +252,7 @@ var respecConfig = {
     <p class="note">The immediate result of the <a data-cite="RDF-CANON#canonicalization">Canonicalization Algorithm</a> is a canonical representation of the RDF dataset represented as N-Quads, using canonical blank node identifiers, and placed in code point order.
       Since the media type for N-Quads is defined in [[[n-quads]]] [[n-quads]] as `application/n-quads`, no further media registration is needed for this form.
       An alternate output of the Canonicalization Algorithm
-      is the <a data-cite="RDF-CANON#dfn-issued-identifiers-map">issued identifiers map</a>, which may be represnted as JSON [[RFC8259]].</p>
+      is the <a data-cite="RDF-CANON#dfn-issued-identifiers-map">issued identifiers map</a>, which may be represented as JSON [[RFC8259]].</p>
 
     <p class="note">
       The <a data-cite="RDF-CANON#canonicalization">Canonicalization Algorithm</a> operates over <a data-cite="RDF-CANON#dfn-quad">RDF quads</a>, rather than separately canonicalizing each <a data-cite="RDF11-CONCEPTS#dfn-rdf-graph">RDF graph</a> contained within a dataset. This is necessary as blank nodes may be shared among graphs within an RDF dataset, or be used as the graph name for a named graph within the dataset, making it important that the full context of each blank node be considered when assigning canonical identifiers.</p>
