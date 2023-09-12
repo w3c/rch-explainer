@@ -288,14 +288,14 @@ var respecConfig = {
 
       <dt id="spaceEfficient">Space-efficient verification of the contents of Datasets</dt>
       <dd>
-        If unique identification of RDF Datasets is possible, one can cryptographically hash the information to establish a storage-efficient way to verify that the information has not changed over time. One property of cryptographic hash is that one can verify data integrity. For example, a small device sending an RDF Dataset to a remote storage location can compute a cryptographic hash for later use in verifying that all the data arrived intact and has not been tampered with. 
-        <br>(Contributed by <a href="https://alanhkarp.com/">Alan Karp.)</a>
+        If unique identification of RDF Datasets is possible, one can cryptographically hash the information to establish a storage-efficient way to verify that the information has not changed over time. One property of cryptographic hash is that one can verify data integrity. For example, a small device sending an RDF Dataset to a remote storage location can compute a cryptographic hash for later use in verifying that all the data arrived intact and has not been tampered with.
+        <br>(Contributed by <a href="https://alanhkarp.com/">Alan Karp</a>.)
       </dd>
 
       <dt id="secretConfirmation">Secret confirmation of the contents of Datasets</dt>
       <dd>
-        Since a cryptographic hash is a one-way function, and serves as an abbreviation for the entire RDF Dataset, one can use it in places where secrecy is desired. For example, when ensuring that the transaction history on a distributed ledger is the same between two services, two systems could keep track of the list of transactions in their respective ledgers. Canonicalizing and cryptographically hashing the list of transactions should result in the same cryptographic hash without either party needing to share the list of transactions with the other. 
-        <br>(Contributed by <a href="https://alanhkarp.com/">Alan Karp.)</a>
+        Since a cryptographic hash is a one-way function, and serves as an abbreviation for the entire RDF Dataset, one can use it in places where secrecy is desired. For example, when ensuring that the transaction history on a distributed ledger is the same between two services, two systems could keep track of the list of transactions in their respective ledgers. Canonicalizing and cryptographically hashing the list of transactions should result in the same cryptographic hash without either party needing to share the list of transactions with the other.
+        <br>(Contributed by <a href="https://alanhkarp.com/">Alan Karp</a>.)
       </dd>
 
       <dt id="dSig">
