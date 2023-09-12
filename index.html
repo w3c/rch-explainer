@@ -9,7 +9,7 @@
 // All config options at https://respec.org/docs/
 var respecConfig = {
   specStatus: "NOTE",
-  group: 'rch',
+  group: "rch",
   edDraftURI: "https://w3c.github.io/rch-explainer/",
   editors: [{
     name: "Ivan Herman",
@@ -127,7 +127,7 @@ var respecConfig = {
   </section>
   <section id="sotd"><p>This document is an updated version of the <a href="https://www.w3.org/2022/07/rch-wg-charter/explainer.html">original explainer document</a> that supported the original chartering of the working group.</p></section>
 
-  <section id='canonicalize'>
+  <section id="canonicalize">
     <h2>Terminology</h2>
 
     <p>
@@ -135,46 +135,46 @@ var respecConfig = {
     </p>
 
     <dl>
-      <dt id='dataset'>RDF Datasets</dt>
+      <dt id="dataset">RDF Datasets</dt>
       <dd>
         <p>
-          <span class='rdf'>R</span>, <span class='rdf'>R'</span> and <span class='rdf'>S</span> each denote an <a href="https://www.w3.org/TR/rdf11-concepts/#section-dataset">RDF Dataset</a> [[rdf11-concepts]].
+          <span class="rdf">R</span>, <span class="rdf">R'</span> and <span class="rdf">S</span> each denote an <a href="https://www.w3.org/TR/rdf11-concepts/#section-dataset">RDF Dataset</a> [[rdf11-concepts]].
         </p>
       </dd>
 
-      <dt id='identical'>Identical RDF Datasets</dt>
+      <dt id="identical">Identical RDF Datasets</dt>
       <dd>
         <p>
-          <span class='rdf'>R = S</span> denotes that <span class='rdf'>R</span> and <span class='rdf'>S</span> are <em>identical</em> RDF Datasets. 
+          <span class="rdf">R = S</span> denotes that <span class="rdf">R</span> and <span class="rdf">S</span> are <em>identical</em> RDF Datasets.
         </p>
         <p>
           Two RDF Datasets are identical if and only if they have the same <a href="https://www.w3.org/TR/rdf11-concepts/#section-dataset">default graph</a> (under set equality) and the same set of <a href="https://www.w3.org/TR/rdf11-concepts/#section-dataset">named graphs</a> (under set equality). </p>
          <p>
-          If <span class='rdf'>R</span> and <span class='rdf'>S</span> are identical, we may equivalently say that they are the <em>same</em> RDF Dataset. 
+          If <span class="rdf">R</span> and <span class="rdf">S</span> are identical, we may equivalently say that they are the <em>same</em> RDF Dataset.
         </p>
       </dd>
 
-      <dt id='isomorphic'>Isomorphic RDF Datasets</dt>
+      <dt id="isomorphic">Isomorphic RDF Datasets</dt>
       <dd>
         <p>
-          <span class='rdf'>R ≈ S</span> denotes that <span class='rdf'>R</span> and <span class='rdf'>S</span> are <a href='https://www.w3.org/TR/rdf11-concepts/#section-dataset-isomorphism'><em>isomorphic</em></a> RDF Datasets. 
+          <span class="rdf">R ≈ S</span> denotes that <span class="rdf">R</span> and <span class="rdf">S</span> are <a href="https://www.w3.org/TR/rdf11-concepts/#section-dataset-isomorphism"><em>isomorphic</em></a> RDF Datasets.
         </p>
         <p>
-          In particular, <span class='rdf'>R</span> is isomorphic with <span class='rdf'>S</span>&thinsp; if and only if it is possible to map (i.e., relabel) the blank nodes of <span class='rdf'>R</span> to the blank nodes of <span class='rdf'>S</span>&thinsp; in a one-to-one manner, generating an RDF dataset <span class='rdf'>R'</span>&thinsp; such that <span class='rdf'>R' = S</span>.
+          In particular, <span class="rdf">R</span> is isomorphic with <span class="rdf">S</span>&thinsp; if and only if it is possible to map (i.e., relabel) the blank nodes of <span class="rdf">R</span> to the blank nodes of <span class="rdf">S</span>&thinsp; in a one-to-one manner, generating an RDF dataset <span class="rdf">R'</span>&thinsp; such that <span class="rdf">R' = S</span>.
         </p>
       </dd>
-      
-      <dt id='canonicalization'>RDF Dataset Canonicalization</dt>
+
+      <dt id="canonicalization">RDF Dataset Canonicalization</dt>
       <dd>
         <p>
-          RDF Dataset Canonicalization is a function <span class='rdf'>C</span>&thinsp; that maps an RDF Dataset to an RDF Dataset in a manner that satisfies the following two properties for all RDF Datasets <span class='rdf'>R</span> and <span class='rdf'>S</span>:
+          RDF Dataset Canonicalization is a function <span class="rdf">C</span>&thinsp; that maps an RDF Dataset to an RDF Dataset in a manner that satisfies the following two properties for all RDF Datasets <span class="rdf">R</span> and <span class="rdf">S</span>:
         </p>
         <ul>
-          <li> <span class='rdf'>R ≈ C(R)</span>&thinsp;; and</li> 
-          <li> <span class='rdf'>C(R) = C(S)</span>&thinsp; if and only if <span class='rdf'>R ≈ S</span>.</li>
+          <li> <span class="rdf">R ≈ C(R)</span>&thinsp;; and</li>
+          <li> <span class="rdf">C(R) = C(S)</span>&thinsp; if and only if <span class="rdf">R ≈ S</span>.</li>
         </ul>
         <p id="canonical_form">
-          We may refer to <span class='rdf'>C(R)</span> as the <em>canonical form</em> of <span class='rdf'>R</span> (under <span class='rdf'>C</span>&nbsp;).
+          We may refer to <span class="rdf">C(R)</span> as the <em>canonical form</em> of <span class="rdf">R</span> (under <span class="rdf">C</span>&nbsp;).
         </p>
         <p>
           Such a canonicalization function can be implemented, in practice, as a procedure that deterministically labels all blank nodes of an RDF Dataset in a one-to-one manner, without depending on any feature of the input serialization (blank node labels, order of the triples, etc.) of the input RDF Dataset.
@@ -182,7 +182,7 @@ var respecConfig = {
       </dd>
     </dl>
 
-    <div class=note id=abstract_concept>
+    <div class="note" id="abstract_concept">
       <p>
         It is important to emphasize that the term “canonicalization” is used here in its very generic form, described as:
       </p>
@@ -226,18 +226,18 @@ var respecConfig = {
     <h2>Defining an RDF Dataset Hash</h2>
 
     <p>
-      One possible approach to calculating the hash of an RDF Dataset <span class='rdf'>R</span> may imply the following steps:
+      One possible approach to calculating the hash of an RDF Dataset <span class="rdf">R</span> may imply the following steps:
     </p>
 
     <ol>
       <li>
-        use an <a href="#canonicalization">RDF Dataset Canonicalization</a> function <span class='rdf'>C</span> to calculate <span class='rdf'>C(R)</span>;
+        use an <a href="#canonicalization">RDF Dataset Canonicalization</a> function <span class="rdf">C</span> to calculate <span class="rdf">C(R)</span>;
       </li>
       <li>
-        serialize <span class='rdf'>C(R)</span> to quads&nbsp;[[n-quads]] and sort the resulting set of quads;
+        serialize <span class="rdf">C(R)</span> to quads&nbsp;[[n-quads]] and sort the resulting set of quads;
       </li>
-      <li id=hash>
-        apply a (traditional) hashing function <span class='rdf'>h</span> on the result of the serialization to yield <span class='rdf'>h(R)</span>&thinsp;; this can be considered as the cryptographic hash of the Dataset.
+      <li id="hash">
+        apply a (traditional) hashing function <span class="rdf">h</span> on the result of the serialization to yield <span class="rdf">h(R)</span>&thinsp;; this can be considered as the cryptographic hash of the Dataset.
       </li>
      </ol>
      <!--<p>
@@ -246,7 +246,7 @@ var respecConfig = {
 
 
     <p>
-      The main challenge for the Working Group was to provide a standard for the <a href="#canonicalization">RDF Dataset Canonicalization function</a>. 
+      The main challenge for the Working Group was to provide a standard for the <a href="#canonicalization">RDF Dataset Canonicalization function</a>.
     </p>
 
     <p class="note">The immediate result of the <a data-cite="RDF-CANON#canonicalization">Canonicalization Algorithm</a> is a canonical representation of the RDF dataset represented as N-Quads, using canonical blank node identifiers, and placed in code point order.
@@ -257,7 +257,7 @@ var respecConfig = {
     <p class="note">
       The <a data-cite="RDF-CANON#canonicalization">Canonicalization Algorithm</a> operates over <a data-cite="RDF-CANON#dfn-quad">RDF quads</a>, rather than separately canonicalizing each <a data-cite="RDF11-CONCEPTS#dfn-rdf-graph">RDF graph</a> contained within a dataset. This is necessary as blank nodes may be shared among graphs within an RDF dataset, or be used as the graph name for a named graph within the dataset, making it important that the full context of each blank node be considered when assigning canonical identifiers.</p>
 
-    <div id="noProblem" class=note>
+    <div id="noProblem" class="note">
       <p>When the hash of a file is transferred from one system to another and the file is used <em>as is</em>, there is no need for any processing other than checking the value of the hash of the file. This is true for RDF just as for any other data formats; this means that any existing hash functions may be used on the original file. However, RDF has many serializations for datasets, notably <a href="https://www.w3.org/TR/trig/">TriG</a>, <a href="https://www.w3.org/TR/json-ld/">JSON-LD</a>, <a href="https://www.w3.org/TR/n-quads/">N-Quads</a>, and, informally, <a href="https://digitalbazaar.github.io/cbor-ld-spec/">CBOR-LD</a>. The <a href="#spaceEfficient">space efficient verification</a> use case points to a need in some circumstances to transform &mdash; usually to minimize &mdash; the data that is transferred. In this scenario, a hash on the original file, such as a hash calculated on a JSON-LD file, is not appropriate, as the conversion will make it invalid. A hash of the abstract dataset, on the other hand, will still be valid.</p>
     </div>
 </section>
@@ -273,7 +273,7 @@ var respecConfig = {
     <p>Standards are not developed in a vacuum. Rather, they are developed as one of several moving pieces that interact to some degree. The Working Group was very aware of the development of RDF 1.2 by the <a href="https://www.w3.org/groups/wg/rdf-star/">RDF-Star Working Group</a>, for example. Once that large scale work is complete (or nearing completion), it may be desirable to revisit RDF Dataset Canonicalization. The work on <a href="https://w3c-cg.github.io/rdfsurfaces/">RDF Surfaces</a> may also entail further changes to RDF Dataset Canonicalization. Waiting until one or both of these projects had been completed would have introduced a delay to developing RDF Datasaet Canonicalization, perhaps of a year or more. To avoid such a delay, the decision was made to focus purely on the existing RDF 1.1 series of standards.</p>
     <p>Another issue facing the community at the time of writing is the base direction of RDF Literals. The addition of language tags to literals is well-used in RDF, however, it is not always clear whether the text should be rendered left to right or right to left. Although this is clearly relevant to dataset canonicalization, the problem has much wider applicability and is, rightly, being tackled by the RDF-Star Working Group. For dataset canonicalization, we simply note that this is an issue that may require future work. </p>
   </section>
-  <section id=usage>
+  <section id="usage">
     <h2>Use Cases and Requirements</h2>
 
     <p>
