@@ -1,0 +1,795 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta name="generator" content="ReSpec 34.1.8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<style>
+.issue-label{text-transform:initial}
+.warning>p:first-child{margin-top:0}
+.warning{padding:.5em;border-left-width:.5em;border-left-style:solid}
+span.warning{padding:.1em .5em .15em}
+.issue.closed span.issue-number{text-decoration:line-through}
+.issue.closed span.issue-number::after{content:" (Closed)";font-size:smaller}
+.warning{border-color:#f11;border-width:.2em;border-style:solid;background:#fbe9e9}
+.warning-title:before{content:"⚠";font-size:1.3em;float:left;padding-right:.3em;margin-top:-.3em}
+li.task-list-item{list-style:none}
+input.task-list-item-checkbox{margin:0 .35em .25em -1.6em;vertical-align:middle}
+.issue a.respec-gh-label{padding:5px;margin:0 2px 0 2px;font-size:10px;text-transform:none;text-decoration:none;font-weight:700;border-radius:4px;position:relative;bottom:2px;border:none;display:inline-block}
+</style>
+<style>
+dfn{cursor:pointer}
+.dfn-panel{position:absolute;z-index:35;min-width:300px;max-width:500px;padding:.5em .75em;margin-top:.6em;font-family:"Helvetica Neue",sans-serif;font-size:small;background:#fff;color:#000;box-shadow:0 1em 3em -.4em rgba(0,0,0,.3),0 0 1px 1px rgba(0,0,0,.05);border-radius:2px}
+.dfn-panel:not(.docked)>.caret{position:absolute;top:-9px}
+.dfn-panel:not(.docked)>.caret::after,.dfn-panel:not(.docked)>.caret::before{content:"";position:absolute;border:10px solid transparent;border-top:0;border-bottom:10px solid #fff;top:0}
+.dfn-panel:not(.docked)>.caret::before{border-bottom:9px solid #a2a9b1}
+.dfn-panel *{margin:0}
+.dfn-panel b{display:block;color:#000;margin-top:.25em}
+.dfn-panel ul a[href]{color:#333}
+.dfn-panel>div{display:flex}
+.dfn-panel a.self-link{font-weight:700;margin-right:auto}
+.dfn-panel .marker{padding:.1em;margin-left:.5em;border-radius:.2em;text-align:center;white-space:nowrap;font-size:90%;color:#040b1c}
+.dfn-panel .marker.dfn-exported{background:#d1edfd;box-shadow:0 0 0 .125em #1ca5f940}
+.dfn-panel .marker.idl-block{background:#8ccbf2;box-shadow:0 0 0 .125em #0670b161}
+.dfn-panel a:not(:hover){text-decoration:none!important;border-bottom:none!important}
+.dfn-panel a[href]:hover{border-bottom-width:1px}
+.dfn-panel ul{padding:0}
+.dfn-panel li{margin-left:1em}
+.dfn-panel.docked{position:fixed;left:.5em;top:unset;bottom:2em;margin:0 auto;max-width:calc(100vw - .75em * 2 - .5em - .2em * 2);max-height:30vh;overflow:auto}
+</style>
+  
+  
+<title>RDF Dataset Canonicalization and Hash Working Group — Explainer and Use Cases</title>
+  
+  
+  
+<style>
+
+.issue {
+  background: teal !important;
+  color: #FFC !important ;
+}
+
+.issue::before {
+  content: "\2009";
+}
+
+.issue::after {
+  content: "\2009";
+}
+
+.todo {
+  color: #900 !important;
+  background-color: #FFC !important;
+}
+
+.rdf {
+  font-style: italic;
+  font-family: cursive;
+}
+  
+</style>
+
+<style id="respec-mainstyle">
+@keyframes pop{
+0%{transform:scale(1,1)}
+25%{transform:scale(1.25,1.25);opacity:.75}
+100%{transform:scale(1,1)}
+}
+:is(h1,h2,h3,h4,h5,h6,a) abbr{border:none}
+dfn{font-weight:700}
+a.internalDFN{color:inherit;border-bottom:1px solid #99c;text-decoration:none}
+a.externalDFN{color:inherit;border-bottom:1px dotted #ccc;text-decoration:none}
+a.bibref{text-decoration:none}
+.respec-offending-element:target{animation:pop .25s ease-in-out 0s 1}
+.respec-offending-element,a[href].respec-offending-element{text-decoration:red wavy underline}
+@supports not (text-decoration:red wavy underline){
+.respec-offending-element:not(pre){display:inline-block}
+.respec-offending-element{background:url(data:image/gif;base64,R0lGODdhBAADAPEAANv///8AAP///wAAACwAAAAABAADAEACBZQjmIAFADs=) bottom repeat-x}
+}
+#references :target{background:#eaf3ff;animation:pop .4s ease-in-out 0s 1}
+cite .bibref{font-style:normal}
+a[href].orcid{padding-left:4px;padding-right:4px}
+a[href].orcid>svg{margin-bottom:-2px}
+.toc a,.tof a{text-decoration:none}
+a .figno,a .secno{color:#000}
+ol.tof,ul.tof{list-style:none outside none}
+.caption{margin-top:.5em;font-style:italic}
+table.simple{border-spacing:0;border-collapse:collapse;border-bottom:3px solid #005a9c}
+.simple th{background:#005a9c;color:#fff;padding:3px 5px;text-align:left}
+.simple th a{color:#fff;padding:3px 5px;text-align:left}
+.simple th[scope=row]{background:inherit;color:inherit;border-top:1px solid #ddd}
+.simple td{padding:3px 10px;border-top:1px solid #ddd}
+.simple tr:nth-child(even){background:#f0f6ff}
+.section dd>p:first-child{margin-top:0}
+.section dd>p:last-child{margin-bottom:0}
+.section dd{margin-bottom:1em}
+.section dl.attrs dd,.section dl.eldef dd{margin-bottom:0}
+#issue-summary>ul{column-count:2}
+#issue-summary li{list-style:none;display:inline-block}
+details.respec-tests-details{margin-left:1em;display:inline-block;vertical-align:top}
+details.respec-tests-details>*{padding-right:2em}
+details.respec-tests-details[open]{z-index:999999;position:absolute;border:thin solid #cad3e2;border-radius:.3em;background-color:#fff;padding-bottom:.5em}
+details.respec-tests-details[open]>summary{border-bottom:thin solid #cad3e2;padding-left:1em;margin-bottom:1em;line-height:2em}
+details.respec-tests-details>ul{width:100%;margin-top:-.3em}
+details.respec-tests-details>li{padding-left:1em}
+.self-link:hover{opacity:1;text-decoration:none;background-color:transparent}
+aside.example .marker>a.self-link{color:inherit}
+.header-wrapper{display:flex;align-items:baseline}
+:is(h2,h3,h4,h5,h6):not(#toc>h2,#abstract>h2,#sotd>h2,.head>h2){position:relative;left:-.5em}
+:is(h2,h3,h4,h5,h6):not(#toch2)+a.self-link{color:inherit;order:-1;position:relative;left:-1.1em;font-size:1rem;opacity:.5}
+:is(h2,h3,h4,h5,h6)+a.self-link::before{content:"§";text-decoration:none;color:var(--heading-text)}
+:is(h2,h3)+a.self-link{top:-.2em}
+:is(h4,h5,h6)+a.self-link::before{color:#000}
+@media (max-width:767px){
+dd{margin-left:0}
+}
+@media print{
+.removeOnSave{display:none}
+}
+</style>
+<meta name="description" content="This is a supporting document for the RDF Dataset Canonicalization specification, providing some extra explanation of the problem space and associated use cases.">
+<link rel="canonical" href="https://www.w3.org/TR/rch-explainer/">
+<style>
+var{position:relative;cursor:pointer}
+var[data-type]::after,var[data-type]::before{position:absolute;left:50%;top:-6px;opacity:0;transition:opacity .4s;pointer-events:none}
+var[data-type]::before{content:"";transform:translateX(-50%);border-width:4px 6px 0 6px;border-style:solid;border-color:transparent;border-top-color:#000}
+var[data-type]::after{content:attr(data-type);transform:translateX(-50%) translateY(-100%);background:#000;text-align:center;font-family:"Dank Mono","Fira Code",monospace;font-style:normal;padding:6px;border-radius:3px;color:#daca88;text-indent:0;font-weight:400}
+var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
+</style>
+<script id="initialUserConfig" type="application/json">{
+  "specStatus": "NOTE",
+  "group": "rch",
+  "edDraftURI": "https://w3c.github.io/rch-explainer/",
+  "editors": [
+    {
+      "name": "Phil Archer",
+      "url": "https://philarcher.org/",
+      "w3cid": 101627,
+      "company": "GS1",
+      "companyURL": "https://www.gs1.org/"
+    }
+  ],
+  "authors": [
+    {
+      "name": "Ivan Herman",
+      "url": "https://www.w3.org/People/Ivan/",
+      "company": "W3C",
+      "w3cid": 7382,
+      "orcid": "https://orcid.org/0000-0003-0782-2704",
+      "companyURL": "https://www.w3.org"
+    },
+    {
+      "name": "Aidan Hogan",
+      "url": "http://aidanhogan.com/",
+      "company": "DCC, Universidad de Chile",
+      "companyURL": "https://www.dcc.uchile.cl/",
+      "orcid": "https://orcid.org/0000-0001-9482-1982"
+    }
+  ],
+  "github": "w3c/rch-explainer",
+  "localBiblio": {
+    "carroll-2003": {
+      "title": "Signing RDF Graphs",
+      "authors": [
+        "Jeremy J. Carroll"
+      ],
+      "href": "https://link.springer.com/chapter/10.1007/978-3-540-39718-2_24",
+      "publisher": "International Semantic Web Conference — ISWC 2003, Springer Verlag, pp 369-384",
+      "rawDate": "2003",
+      "id": "carroll-2003"
+    },
+    "kasten-et-al-2014": {
+      "title": "A Framework for Iterative Signing of Graph Data on the Web",
+      "authors": [
+        "Andreas Kasten",
+        "Ansgar Scherp",
+        "Peter Schauß"
+      ],
+      "href": "https://link.springer.com/chapter/10.1007%2F978-3-319-07443-6_11",
+      "publisher": "European Semantic Web Conference — ESWC 2014, Springer Verlag, pp. 146-160",
+      "rawDate": "2014",
+      "id": "kasten-et-al-2014"
+    },
+    "hogan-2017": {
+      "title": "Canonical Forms for Isomorphic and Equivalent RDF Graphs: Algorithms for Leaning and Labelling Blank Nodes",
+      "authors": [
+        "Aidan Hogan"
+      ],
+      "href": "http://aidanhogan.com/docs/rdf-canonicalisation.pdf",
+      "publisher": "ACM Transactions on the Web, vol. 11, no. 4, pp. 22:1-22:62",
+      "rawDate": "2017",
+      "id": "hogan-2017"
+    },
+    "arnold-longley-2020": {
+      "title": "RDF Dataset Normalization",
+      "authors": [
+        "Rachel Arnold",
+        "Dave Longley"
+      ],
+      "href": "https://lists.w3.org/Archives/Public/public-credentials/2021Mar/att-0220/RDFDatasetCanonicalization-2020-10-09.pdf",
+      "status": "Report submitted to the W3C Credentials Community Group mailing list",
+      "rawDate": "2020-10-09",
+      "id": "arnold-longley-2020"
+    },
+    "CCG-RDC-FINAL": {
+      "id": "CCG-RDC-FINAL",
+      "title": "RDF Dataset Canonicalization",
+      "authors": [
+        "Dave Longley"
+      ],
+      "editors": [
+        "Dave Longley",
+        "Manu Sporny"
+      ],
+      "date": "October 9, 2022",
+      "href": "https://www.w3.org/community/reports/credentials/CG-FINAL-rdf-dataset-canonicalization-20221009/",
+      "status": "CG-FINAL",
+      "publisher": "W3C"
+    }
+  },
+  "publishISODate": "2023-10-11T00:00:00.000Z",
+  "generatedSubtitle": "W3C Group Note 11 October 2023"
+}</script>
+<link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/2021/W3C-NOTE"></head>
+
+<body class="h-entry informative"><div class="head">
+    <p class="logos"><a class="logo" href="https://www.w3.org/"><img crossorigin="" alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72">
+  </a></p>
+    <h1 id="title" class="title">RDF Dataset Canonicalization and Hash Working Group — Explainer and Use Cases</h1> 
+    <p id="w3c-state"><a href="https://www.w3.org/standards/types#NOTE">W3C Group Note</a> <time class="dt-published" datetime="2023-10-11">11 October 2023</time></p>
+    <details open="">
+      <summary>More details about this document</summary>
+      <dl>
+        <dt>This version:</dt><dd>
+                <a class="u-url" href="https://www.w3.org/TR/2023/NOTE-rch-explainer-20231011/">https://www.w3.org/TR/2023/NOTE-rch-explainer-20231011/</a>
+              </dd>
+        <dt>Latest published version:</dt><dd>
+                <a href="https://www.w3.org/TR/rch-explainer/">https://www.w3.org/TR/rch-explainer/</a>
+              </dd>
+        <dt>Latest editor's draft:</dt><dd><a href="https://w3c.github.io/rch-explainer/">https://w3c.github.io/rch-explainer/</a></dd>
+        <dt>History:</dt><dd>
+                    <a href="https://www.w3.org/standards/history/rch-explainer/">https://www.w3.org/standards/history/rch-explainer/</a>
+                  </dd><dd>
+                    <a href="https://github.com/w3c/rch-explainer/commits/">Commit history</a>
+                  </dd>
+        
+        
+        
+        
+        
+        <dt>Editor:</dt><dd class="editor p-author h-card vcard" data-editor-id="101627">
+    <a class="u-url url p-name fn" href="https://philarcher.org/">Phil Archer</a> (<a class="p-org org h-org" href="https://www.gs1.org/">GS1</a>)
+  </dd>
+        
+        <dt>Authors:</dt><dd class="editor p-author h-card vcard" data-editor-id="7382">
+    <a class="u-url url p-name fn" href="https://www.w3.org/People/Ivan/">Ivan Herman</a><a class="p-name orcid" href="https://orcid.org/0000-0003-0782-2704"><svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+    <style>
+
+      .st1 {
+        fill: #fff;
+      }
+    
+</style>
+    <path d="M256 128c0 70.7-57.3 128-128 128S0 198.7 0 128 57.3 0 128 0s128 57.3 128 128z" fill="#a6ce39"></path>
+    <path class="st1" d="M86.3 186.2H70.9V79.1h15.4v107.1zM108.9 79.1h41.6c39.6 0 57 28.3 57 53.6 0 27.5-21.5 53.6-56.8 53.6h-41.8V79.1zm15.4 93.3h24.5c34.9 0 42.9-26.5 42.9-39.7C191.7 111.2 178 93 148 93h-23.7v79.4zM88.7 56.8c0 5.5-4.5 10.1-10.1 10.1s-10.1-4.6-10.1-10.1c0-5.6 4.5-10.1 10.1-10.1s10.1 4.6 10.1 10.1z"></path>
+  </svg></a> (<a class="p-org org h-org" href="https://www.w3.org">W3C</a>)
+  </dd><dd class="editor p-author h-card vcard">
+    <a class="u-url url p-name fn" href="http://aidanhogan.com/">Aidan Hogan</a><a class="p-name orcid" href="https://orcid.org/0000-0001-9482-1982"><svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+    <style>
+
+      .st1 {
+        fill: #fff;
+      }
+    
+</style>
+    <path d="M256 128c0 70.7-57.3 128-128 128S0 198.7 0 128 57.3 0 128 0s128 57.3 128 128z" fill="#a6ce39"></path>
+    <path class="st1" d="M86.3 186.2H70.9V79.1h15.4v107.1zM108.9 79.1h41.6c39.6 0 57 28.3 57 53.6 0 27.5-21.5 53.6-56.8 53.6h-41.8V79.1zm15.4 93.3h24.5c34.9 0 42.9-26.5 42.9-39.7C191.7 111.2 178 93 148 93h-23.7v79.4zM88.7 56.8c0 5.5-4.5 10.1-10.1 10.1s-10.1-4.6-10.1-10.1c0-5.6 4.5-10.1 10.1-10.1s10.1 4.6 10.1 10.1z"></path>
+  </svg></a> (<a class="p-org org h-org" href="https://www.dcc.uchile.cl/">DCC, Universidad de Chile</a>)
+  </dd>
+        <dt>Feedback:</dt><dd>
+        <a href="https://github.com/w3c/rch-explainer/">GitHub w3c/rch-explainer</a>
+        (<a href="https://github.com/w3c/rch-explainer/pulls/">pull requests</a>,
+        <a href="https://github.com/w3c/rch-explainer/issues/new/choose">new issue</a>,
+        <a href="https://github.com/w3c/rch-explainer/issues/">open issues</a>)
+      </dd>
+        
+        
+      </dl>
+    </details>
+    
+    
+    <p class="copyright">
+    <a href="https://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a>
+    ©
+    2023
+    
+    <a href="https://www.w3.org/">World Wide Web Consortium</a>.
+    <abbr title="World Wide Web Consortium">W3C</abbr><sup>®</sup>
+    <a href="https://www.w3.org/Consortium/Legal/ipr-notice#Legal_Disclaimer">liability</a>,
+    <a href="https://www.w3.org/Consortium/Legal/ipr-notice#W3C_Trademarks">trademark</a> and
+    <a rel="license" href="https://www.w3.org/Consortium/Legal/2023/software-license" title="W3C Software and Document Notice and License">permissive document license</a> rules apply.
+  </p>
+    <hr title="Separator for header">
+  </div>
+  <section id="abstract" class="introductory"><h2>Abstract</h2>
+    <p>
+      This is a supporting document for the <a href="https://www.w3.org/TR/rdf-canon/">RDF Dataset Canonicalization</a> specification, providing some extra explanation of the problem space and associated use cases.
+    </p>
+  </section>
+  <section id="sotd" class="introductory"><h2>Status of This Document</h2><p><em>This section describes the status of this
+      document at the time of its publication. A list of current <abbr title="World Wide Web Consortium">W3C</abbr>
+      publications and the latest revision of this technical report can be found
+      in the <a href="https://www.w3.org/TR/"><abbr title="World Wide Web Consortium">W3C</abbr> technical reports index</a> at
+      https://www.w3.org/TR/.</em></p><p>This document is an updated version of the <a href="https://www.w3.org/2022/07/rch-wg-charter/explainer.html">original explainer document</a> that supported the original chartering of the working group.</p><p>
+    This document was published by the <a href="https://www.w3.org/groups/wg/rch">RDF Dataset Canonicalization and Hash Working Group</a> as
+    a Group Note using the
+        <a href="https://www.w3.org/2023/Process-20230612/#recs-and-notes">Note track</a>. 
+  </p><p>This Group Note is endorsed by
+        the <a href="https://www.w3.org/groups/wg/rch">RDF Dataset Canonicalization and Hash Working Group</a>, but is not endorsed by
+        <abbr title="World Wide Web Consortium">W3C</abbr> itself nor its
+        Members. </p><p>
+    This is a draft document and may be updated, replaced or obsoleted by other
+    documents at any time. It is inappropriate to cite this document as other
+    than work in progress.
+    
+  </p><p data-deliverer="138751">
+    
+        The
+        <a href="https://www.w3.org/Consortium/Patent-Policy/"><abbr title="World Wide Web Consortium">W3C</abbr> Patent
+          Policy</a>
+        does not carry any licensing requirements or commitments on this
+        document.
+      
+    
+  </p><p>
+                  This document is governed by the
+                  <a id="w3c_process_revision" href="https://www.w3.org/2023/Process-20230612/">12 June 2023 <abbr title="World Wide Web Consortium">W3C</abbr> Process Document</a>.
+                </p></section><nav id="toc"><h2 class="introductory" id="table-of-contents">Table of Contents</h2><ol class="toc"><li class="tocline"><a class="tocxref" href="#abstract">Abstract</a></li><li class="tocline"><a class="tocxref" href="#sotd">Status of This Document</a></li><li class="tocline"><a class="tocxref" href="#introduction"><bdi class="secno">1. </bdi>Introduction</a></li><li class="tocline"><a class="tocxref" href="#canonicalize"><bdi class="secno">2. </bdi>Terminology</a></li><li class="tocline"><a class="tocxref" href="#generalProblem"><bdi class="secno">3. </bdi>The General Problem Space</a></li><li class="tocline"><a class="tocxref" href="#goals"><bdi class="secno">4. </bdi>Defining an RDF Dataset Hash</a></li><li class="tocline"><a class="tocxref" href="#specDevelopment"><bdi class="secno">5. </bdi>Development of the specification</a></li><li class="tocline"><a class="tocxref" href="#future"><bdi class="secno">6. </bdi>Future work</a></li><li class="tocline"><a class="tocxref" href="#usage"><bdi class="secno">7. </bdi>Use Cases and Requirements</a></li><li class="tocline"><a class="tocxref" href="#references"><bdi class="secno">A. </bdi>References</a><ol class="toc"><li class="tocline"><a class="tocxref" href="#informative-references"><bdi class="secno">A.1 </bdi>Informative references</a></li></ol></li></ol></nav>
+<section id="introduction"><div class="header-wrapper"><h2 id="x1-introduction"><bdi class="secno">1. </bdi>Introduction</h2><a class="self-link" href="#introduction" aria-label="Permalink for Section 1."></a></div>
+  <p>This short document provides some basic background to the development of <i>RDF Dataset Canonicalization</i> [<cite><a class="bibref" data-link-type="biblio" href="#bib-rdf-canon" title="RDF Dataset Canonicalization">rdf-canon</a></cite>]. It includes a number of representative use cases that originally motivated the work.</p>
+</section>
+  <section id="canonicalize"><div class="header-wrapper"><h2 id="x2-terminology"><bdi class="secno">2. </bdi>Terminology</h2><a class="self-link" href="#canonicalize" aria-label="Permalink for Section 2."></a></div>
+    
+
+    <p>
+      For a precise definition of the various terms and concepts, the reader should refer to the formal RDF specification&nbsp;[<cite><a class="bibref" data-link-type="biblio" href="#bib-rdf11-concepts" title="RDF 1.1 Concepts and Abstract Syntax">rdf11-concepts</a></cite>].
+    </p>
+
+    <dl>
+      <dt id="dataset">RDF Datasets</dt>
+      <dd>
+        <p>
+          <span class="rdf">R</span>, <span class="rdf">R'</span> and <span class="rdf">S</span> each denote an <a href="https://www.w3.org/TR/rdf11-concepts/#section-dataset">RDF Dataset</a> [<cite><a class="bibref" data-link-type="biblio" href="#bib-rdf11-concepts" title="RDF 1.1 Concepts and Abstract Syntax">rdf11-concepts</a></cite>].
+        </p>
+      </dd>
+
+      <dt id="identical">Identical RDF Datasets</dt>
+      <dd>
+        <p>
+          <span class="rdf">R = S</span> denotes that <span class="rdf">R</span> and <span class="rdf">S</span> are <em>identical</em> RDF Datasets.
+        </p>
+        <p>
+          Two RDF Datasets are identical if and only if they have the same <a href="https://www.w3.org/TR/rdf11-concepts/#section-dataset">default graph</a> (under set equality) and the same set of <a href="https://www.w3.org/TR/rdf11-concepts/#section-dataset">named graphs</a> (under set equality). </p>
+         <p>
+          If <span class="rdf">R</span> and <span class="rdf">S</span> are identical, we may equivalently say that they are the <em>same</em> RDF Dataset.
+        </p>
+      </dd>
+
+      <dt id="isomorphic">Isomorphic RDF Datasets</dt>
+      <dd>
+        <p>
+          <span class="rdf">R ≈&nbsp;S</span> denotes that <span class="rdf">R</span> and <span class="rdf">S</span> are <a href="https://www.w3.org/TR/rdf11-concepts/#section-dataset-isomorphism"><em>isomorphic</em></a> RDF Datasets.
+        </p>
+        <p>
+          In particular, <span class="rdf">R</span> is isomorphic with <span class="rdf">S</span>  if and only if it is possible to map (i.e., relabel) the blank nodes of <span class="rdf">R</span> to the blank nodes of <span class="rdf">S</span>  in a one-to-one manner, generating an RDF dataset <span class="rdf">R'</span>  such that <span class="rdf">R' =&nbsp;S</span>.
+        </p>
+      </dd>
+
+      <dt id="canonicalization">RDF Dataset Canonicalization</dt>
+      <dd>
+        <p>
+          RDF Dataset Canonicalization is a function <span class="rdf">C</span>  that maps an RDF Dataset to an RDF Dataset in a manner that satisfies the following two properties for all RDF Datasets <span class="rdf">R</span> and <span class="rdf">S</span>:
+        </p>
+        <ul>
+          <li> <span class="rdf">R ≈ C(R)</span> ; and</li>
+          <li> <span class="rdf">C(R)&nbsp;= C(S)</span>  if and only if <span class="rdf">R ≈&nbsp;S</span>.</li>
+        </ul>
+        <p id="canonical_form">
+          We may refer to <span class="rdf">C(R)</span> as the <em>canonical form</em> of <span class="rdf">R</span> (under <span class="rdf">C</span>&nbsp;).
+        </p>
+        <p>
+          Such a canonicalization function can be implemented, in practice, as a procedure that deterministically labels all blank nodes of an RDF Dataset in a one-to-one manner, without depending on any feature of the input serialization (blank node labels, order of the triples, etc.) of the input RDF Dataset.
+        </p>
+      </dd>
+    </dl>
+
+    <div class="note" role="note" id="abstract_concept"><div role="heading" class="note-title marker" id="h-note" aria-level="3"><span>Note</span></div><div class="">
+      <p>
+        It is important to emphasize that the term "canonicalization" is used here in its very generic form, described as:
+      </p>
+
+      <blockquote>
+        In computer science, <b>canonicalization</b> […] is a process for converting data that has more than one possible representation into a "standard", "normal", or canonical form. <br> Source: <a href="https://en.wikipedia.org/wiki/Canonicalization">Wikipedia</a>.
+      </blockquote>
+
+      <p>
+        Canonicalization, as used in the context of this document, is defined on <em>an abstract data model</em> (i.e., on an <a href="https://www.w3.org/TR/rdf11-concepts/#section-dataset">RDF Dataset</a> [<cite><a class="bibref" data-link-type="biblio" href="#bib-rdf11-concepts" title="RDF 1.1 Concepts and Abstract Syntax">rdf11-concepts</a></cite>]), regardless of a specific serialization. (It could also be referred to as a "canonical labeling scheme").
+        It is therefore very different from the usage of the term in, for example, the "Canonical XML" [<cite><a class="bibref" data-link-type="biblio" href="#bib-xml-c14n11" title="Canonical XML Version 1.1">xml-c14n11</a></cite>] or the "JSON Canonicalization Scheme" [<cite><a class="bibref" data-link-type="biblio" href="#bib-rfc8785" title="JSON Canonicalization Scheme (JCS)">rfc8785</a></cite>] specifications which are, essentially, syntactic transformations of the respective documents. Any comparison with those documents can be misleading.
+      </p>
+
+
+    </div></div></section>
+
+    <section id="generalProblem"><div class="header-wrapper"><h2 id="x3-the-general-problem-space"><bdi class="secno">3. </bdi>The General Problem Space</h2><a class="self-link" href="#generalProblem" aria-label="Permalink for Section 3."></a></div>
+      
+      <p>
+        Though canonical labeling procedures for directed and undirected graphs have been studied for several decades, only in the past 10 years have two generalized and comprehensive approaches been proposed for RDF Graphs and RDF Datasets:
+      </p>
+
+      <ol>
+        <li>
+          Algorithms for signing RDF data have been proposed in [<cite><a class="bibref" data-link-type="biblio" href="#bib-carroll-2003" title="Signing RDF Graphs">carroll-2003</a></cite>] and [<cite><a class="bibref" data-link-type="biblio" href="#bib-kasten-et-al-2014" title="A Framework for Iterative Signing of Graph Data on the Web">kasten-et-al-2014</a></cite>], both reviewed through the anonymous scholarly peer review process. However, these approaches are not sound and complete with respect to isomorphism.
+        </li>
+        <li>
+          The algorithms defined by Aidan Hogan in [<cite><a class="bibref" data-link-type="biblio" href="#bib-hogan-2017" title="Canonical Forms for Isomorphic and Equivalent RDF Graphs: Algorithms for Leaning and Labelling Blank Nodes">hogan-2017</a></cite>], reviewed through the anonymous scholarly peer review process, and also implemented by the author.
+        </li>
+        <li>
+          The algorithm defined by Rachel Arnold and Dave Longley, see [<cite><a class="bibref" data-link-type="biblio" href="#bib-arnold-longley-2020" title="RDF Dataset Normalization">arnold-longley-2020</a></cite>], <a href="https://lists.w3.org/Archives/Public/public-credentials/2021Apr/att-0032/Mirabolic_Graph_Iso_Report_2020_10_19.pdf">reviewed</a> by <a href="https://lists.w3.org/Archives/Public/public-credentials/2021Apr/0032.html">experts at Mirabolic Consulting</a>, implemented and deployed via, e.g., the <a href="https://github.com/digitalbazaar/jsonld-signatures">JSON-LD Signatures package</a> used in several JSON-LD Signature suites.
+        </li>
+      </ol>
+
+      <p>
+        The introduction of <a href="http://aidanhogan.com/docs/rdf-canonicalisation.pdf">Aidan Hogan’s paper</a>&nbsp;[<cite><a class="bibref" data-link-type="biblio" href="#bib-hogan-2017" title="Canonical Forms for Isomorphic and Equivalent RDF Graphs: Algorithms for Leaning and Labelling Blank Nodes">hogan-2017</a></cite>] also contains a more thorough description of the underlying mathematical challenges.
+      </p>
+    </section>
+
+    <section id="goals"><div class="header-wrapper"><h2 id="x4-defining-an-rdf-dataset-hash"><bdi class="secno">4. </bdi>Defining an RDF Dataset Hash</h2><a class="self-link" href="#goals" aria-label="Permalink for Section 4."></a></div>
+    
+
+    <p>
+      One possible approach to calculating the hash of an RDF Dataset <span class="rdf">R</span> may imply the following steps:
+    </p>
+
+    <ol>
+      <li>
+        use an <a href="#canonicalization">RDF Dataset Canonicalization</a> function <span class="rdf">C</span> to calculate <span class="rdf">C(R)</span>;
+      </li>
+      <li>
+        serialize <span class="rdf">C(R)</span> to quads&nbsp;[<cite><a class="bibref" data-link-type="biblio" href="#bib-n-quads" title="RDF 1.1 N-Quads">n-quads</a></cite>] and sort the resulting set of quads;
+      </li>
+      <li id="hash">
+        apply a (traditional) hashing function <span class="rdf">h</span> on the result of the serialization to yield <span class="rdf">h(R)</span> ; this can be considered as the cryptographic hash of the Dataset.
+      </li>
+     </ol>
+     
+
+
+    <p>
+      The main challenge for the Working Group was to provide a standard for the <a href="#canonicalization">RDF Dataset Canonicalization function</a>.
+    </p>
+
+    <div class="note" role="note" id="issue-container-generatedID"><div role="heading" class="note-title marker" id="h-note-0" aria-level="3"><span>Note</span></div><p class="">The immediate result of the <a href="https://www.w3.org/TR/rdf-canon/#canonicalization">Canonicalization Algorithm</a> is a canonical representation of the RDF dataset represented as N-Quads, using canonical blank node identifiers, and placed in code point order.
+      Since the media type for N-Quads is defined in <cite><a data-matched-text="[[[n-quads]]]" href="https://www.w3.org/TR/n-quads/">RDF 1.1 N-Quads</a></cite> [<cite><a class="bibref" data-link-type="biblio" href="#bib-n-quads" title="RDF 1.1 N-Quads">n-quads</a></cite>] as <code>application/n-quads</code>, no further media registration is needed for this form.
+      An alternate output of the Canonicalization Algorithm
+      is the <a href="https://www.w3.org/TR/rdf-canon/#dfn-issued-identifiers-map">issued identifiers map</a>, which may be represented as JSON [<cite><a class="bibref" data-link-type="biblio" href="#bib-rfc8259" title="The JavaScript Object Notation (JSON) Data Interchange Format">RFC8259</a></cite>].</p></div>
+
+    <div class="note" role="note" id="issue-container-generatedID-0"><div role="heading" class="note-title marker" id="h-note-1" aria-level="3"><span>Note</span></div><p class="">
+      The <a href="https://www.w3.org/TR/rdf-canon/#canonicalization">Canonicalization Algorithm</a> operates over <a href="https://www.w3.org/TR/rdf-canon/#dfn-quad">RDF quads</a>, rather than separately canonicalizing each <a href="https://www.w3.org/TR/rdf11-concepts/#dfn-rdf-graph">RDF graph</a> contained within a dataset. This is necessary as blank nodes may be shared among graphs within an RDF dataset, or be used as the graph name for a named graph within the dataset, making it important that the full context of each blank node be considered when assigning canonical identifiers.</p></div>
+
+    <div class="note" role="note" id="noProblem"><div role="heading" class="note-title marker" id="h-note-2" aria-level="3"><span>Note</span></div><div class="">
+      <p>When the hash of a file is transferred from one system to another and the file is used <em>as is</em>, there is no need for any processing other than checking the value of the hash of the file. This is true for RDF just as for any other data formats; this means that any existing hash functions may be used on the original file. However, RDF has many serializations for datasets, notably <a href="https://www.w3.org/TR/trig/">TriG</a>, <a href="https://www.w3.org/TR/json-ld/">JSON-LD</a>, <a href="https://www.w3.org/TR/n-quads/">N-Quads</a>, and, informally, <a href="https://digitalbazaar.github.io/cbor-ld-spec/">CBOR-LD</a>. The <a href="#spaceEfficient">space efficient verification</a> use case points to a need in some circumstances to transform — usually to minimize — the data that is transferred. In this scenario, a hash on the original file, such as a hash calculated on a JSON-LD file, is not appropriate, as the conversion will make it invalid. A hash of the abstract dataset, on the other hand, will still be valid.</p>
+    </div></div>
+</section>
+
+<section id="specDevelopment"><div class="header-wrapper"><h2 id="x5-development-of-the-specification"><bdi class="secno">5. </bdi>Development of the specification</h2><a class="self-link" href="#specDevelopment" aria-label="Permalink for Section 5."></a></div>
+<p>The working group considered the algorithms proposed by Aidan Hogan [<cite><a class="bibref" data-link-type="biblio" href="#bib-hogan-2017" title="Canonical Forms for Isomorphic and Equivalent RDF Graphs: Algorithms for Leaning and Labelling Blank Nodes">hogan-2017</a></cite>] and by Rachel Arnold and Dave Longley [<cite><a class="bibref" data-link-type="biblio" href="#bib-arnold-longley-2020" title="RDF Dataset Normalization">arnold-longley-2020</a></cite>]. The latter was the basis for the final report on the topic published by the <a href="https://www.w3.org/community/credentials/">Credentials Community Group</a> [<cite><a class="bibref" data-link-type="biblio" href="#bib-ccg-rdc-final" title="RDF Dataset Canonicalization">CCG-RDC-FINAL</a></cite>]. It was largely through that effort that the Arnold/Longley approach enjoyed significant implementation experience before the working group was chartered, backed up by a test suite. For this reason, after careful consideration of the alternatives, efforts focused on formalizing the Arnold/Longley approach.</p>
+<p>A major issue that the working group had to tackle was precisely what would the serialized output of the algorithm be that could then be hashed? The current  N-Triples Recommendation [<cite><a class="bibref" data-link-type="biblio" href="#bib-n-triples-20140225" title="RDF 1.1 N-Triples">n-triples-20140225</a></cite>] includes the definition of a <a href="https://www.w3.org/TR/n-triples/#canonical-ntriples">canonical form</a>. However, the same is not true for N-Quads [<cite><a class="bibref" data-link-type="biblio" href="#bib-n-quads-20140225" title="RDF 1.1 N-Quads">n-quads-20140225</a></cite>]. This is expected to be added to a forthcoming version of the N-Quads specification but, for now, normative text is included in the RDF Dataset Canonicalization document. It is necessary to serialize the algorithm output as N-Quads, rather than N-Triples, as the input and output are RDF Datasets, which may include multiple graphs.</p>
+<p>On a related issue, the RDF Dataset Canonicalization specification includes an important note about the canonical form of literals, especially language tags.</p>
+
+  </section>
+
+  <section id="future"><div class="header-wrapper"><h2 id="x6-future-work"><bdi class="secno">6. </bdi>Future work</h2><a class="self-link" href="#future" aria-label="Permalink for Section 6."></a></div>
+    <p>Standards are not developed in a vacuum. Rather, they are developed as one of several moving pieces that interact to some degree. The Working Group was very aware of the development of RDF 1.2 by the <a href="https://www.w3.org/groups/wg/rdf-star/">RDF-Star Working Group</a>, for example. Once that large scale work is complete (or nearing completion), it may be desirable to revisit RDF Dataset Canonicalization. The work on <a href="https://w3c-cg.github.io/rdfsurfaces/">RDF Surfaces</a> may also entail further changes to RDF Dataset Canonicalization. Waiting until one or both of these projects had been completed would have introduced a delay to developing RDF Datasaet Canonicalization, perhaps of a year or more. To avoid such a delay, the decision was made to focus purely on the existing RDF 1.1 series of standards.</p>
+    <p>Another issue facing the community at the time of writing is the base direction of RDF Literals. The addition of language tags to literals is well-used in RDF, however, it is not always clear whether the text should be rendered left to right or right to left. Although this is clearly relevant to dataset canonicalization, the problem has much wider applicability and is, rightly, being tackled by the RDF-Star Working Group. For dataset canonicalization, we simply note that this is an issue that may require future work. </p>
+  </section>
+  <section id="usage"><div class="header-wrapper"><h2 id="x7-use-cases-and-requirements"><bdi class="secno">7. </bdi>Use Cases and Requirements</h2><a class="self-link" href="#usage" aria-label="Permalink for Section 7."></a></div>
+    
+
+    <p>
+      Some typical use cases for RDF Dataset Canonicalization and/or signatures are:
+    </p>
+
+    <dl>
+      <dt id="detectingChanges">Detecting changes in Datasets</dt>
+      <dd>
+        When processing RDF Datasets over a period of time, determining if information has changed is helpful. For example, knowing if information has changed helps with data cache invalidation, detecting if expected data has been tampered with or modified, or when debugging unexpected changes in source RDF Datasets.
+      </dd>
+
+      <dt id="spaceEfficient">Space-efficient verification of the contents of Datasets</dt>
+      <dd>
+        If unique identification of RDF Datasets is possible, one can cryptographically hash the information to establish a storage-efficient way to verify that the information has not changed over time. One property of cryptographic hash is that one can verify data integrity. For example, a small device sending an RDF Dataset to a remote storage location can compute a cryptographic hash for later use in verifying that all the data arrived intact and has not been tampered with.
+        <br>(Contributed by <a href="https://alanhkarp.com/">Alan Karp</a>.)
+      </dd>
+
+      <dt id="secretConfirmation">Secret confirmation of the contents of Datasets</dt>
+      <dd>
+        Since a cryptographic hash is a one-way function, and serves as an abbreviation for the entire RDF Dataset, one can use it in places where secrecy is desired. For example, when ensuring that the transaction history on a distributed ledger is the same between two services, two systems could keep track of the list of transactions in their respective ledgers. Canonicalizing and cryptographically hashing the list of transactions should result in the same cryptographic hash without either party needing to share the list of transactions with the other.
+        <br>(Contributed by <a href="https://alanhkarp.com/">Alan Karp</a>.)
+      </dd>
+
+      <dt id="dSig">
+        Annotating Datasets with digital signatures and other digital proofs
+      </dt>
+      <dd>
+        When publishing or transmitting an RDF Dataset, clearly articulating the entity that published the data and protecting it from undetected modification is useful for mission critical systems. For example, understanding the issuer of a <a href="https://www.w3.org/TR/vc-data-model/#what-is-a-verifiable-credential">Verifiable Credential</a> and ensuring that it is evident when a <a href="https://www.w3.org/TR/vc-data-model/#dfn-verifiable-presentations">Verifiable Presentation</a> has been tampered with underlies the trustworthiness of the encoded information. This process can go through the calculation of the hash of the Verifiable Credential represented as an RDF Dataset and use some standard cryptographic signature method to ensure the integrity of the hash value.
+      </dd>
+
+      <dt id="skolem">
+        Generating canonical Skolem IRIs for blank nodes
+      </dt>
+      <dd>
+        <a href="https://www.w3.org/TR/rdf11-concepts/#section-skolemization">Skolem IRIs</a> have been proposed in RDF 1.1 as a way to replace blank nodes with IRIs in application scenarios where it is preferable to avoid the use of blank nodes. Rather than using an ad hoc scheme to generate Skolem IRIs to replace blank nodes, an alternative is to generate Skolem IRIs in a deterministic manner, such that compliant implementations will generate the same IRIs to replace the same blank nodes in isomorphic copies of an RDF graph or dataset. Such a procedure will produce a canonical version of a Skolemized RDF graph or dataset that can then be used in the context of several of the use-cases mentioned previously.
+      </dd>
+
+      <dt id="semanticConsistency">Semantic consistency of multi-part datasets</dt>
+      <dd>The <a href="#detectingChanges">change detection</a> and <a href="#spaceEfficient">space-efficient verification</a> use-cases above can be leveraged in situations where a graph or dataset semantically relies on one or several other graph(s), which it refers to through links. Attaching cryptographic hashes to these links would enable the verification of the overall integrity of the set of interconnected graphs. One such example is the <a href="https://www.w3.org/TR/owl2-primer/#a_imports">import mechanism of OWL</a>: the ontology consumer may wish to verify that the imported ontology is the same as the one used by the author of the importing ontology, otherwise the resulting inferences may differ. Another such example is an <a href="https://www.w3.org/TR/EARL10-Schema/">EARL test report</a>: the consumer may wish to ensure that the test description pointed to by the report is the one that was actually used for the test.
+      </dd>
+    </dl>
+  </section>
+
+
+
+
+<section id="references" class="appendix"><div class="header-wrapper"><h2 id="a-references"><bdi class="secno">A. </bdi>References</h2><a class="self-link" href="#references" aria-label="Permalink for Appendix A."></a></div><section id="informative-references"><div class="header-wrapper"><h3 id="a-1-informative-references"><bdi class="secno">A.1 </bdi>Informative references</h3><a class="self-link" href="#informative-references" aria-label="Permalink for Appendix A.1"></a></div>
+    
+    <dl class="bibliography"><dt id="bib-arnold-longley-2020">[arnold-longley-2020]</dt><dd>
+      <a href="https://lists.w3.org/Archives/Public/public-credentials/2021Mar/att-0220/RDFDatasetCanonicalization-2020-10-09.pdf"><cite>RDF Dataset Normalization</cite></a>. Rachel Arnold; Dave Longley. Report submitted to the W3C Credentials Community Group mailing list. URL: <a href="https://lists.w3.org/Archives/Public/public-credentials/2021Mar/att-0220/RDFDatasetCanonicalization-2020-10-09.pdf">https://lists.w3.org/Archives/Public/public-credentials/2021Mar/att-0220/RDFDatasetCanonicalization-2020-10-09.pdf</a>
+    </dd><dt id="bib-carroll-2003">[carroll-2003]</dt><dd>
+      <a href="https://link.springer.com/chapter/10.1007/978-3-540-39718-2_24"><cite>Signing RDF Graphs</cite></a>. Jeremy J. Carroll.  International Semantic Web Conference — ISWC 2003, Springer Verlag, pp&nbsp;369-384. URL: <a href="https://link.springer.com/chapter/10.1007/978-3-540-39718-2_24">https://link.springer.com/chapter/10.1007/978-3-540-39718-2_24</a>
+    </dd><dt id="bib-ccg-rdc-final">[CCG-RDC-FINAL]</dt><dd>
+      <a href="https://www.w3.org/community/reports/credentials/CG-FINAL-rdf-dataset-canonicalization-20221009/"><cite>RDF Dataset Canonicalization</cite></a>. Dave Longley.  W3C. October 9, 2022. CG-FINAL. URL: <a href="https://www.w3.org/community/reports/credentials/CG-FINAL-rdf-dataset-canonicalization-20221009/">https://www.w3.org/community/reports/credentials/CG-FINAL-rdf-dataset-canonicalization-20221009/</a>
+    </dd><dt id="bib-hogan-2017">[hogan-2017]</dt><dd>
+      <a href="http://aidanhogan.com/docs/rdf-canonicalisation.pdf"><cite>Canonical Forms for Isomorphic and Equivalent RDF Graphs: Algorithms for Leaning and Labelling Blank Nodes</cite></a>. Aidan Hogan.  ACM Transactions on the Web, vol. 11, no. 4, pp.&nbsp;22:1-22:62. URL: <a href="http://aidanhogan.com/docs/rdf-canonicalisation.pdf">http://aidanhogan.com/docs/rdf-canonicalisation.pdf</a>
+    </dd><dt id="bib-kasten-et-al-2014">[kasten-et-al-2014]</dt><dd>
+      <a href="https://link.springer.com/chapter/10.1007%2F978-3-319-07443-6_11"><cite>A Framework for Iterative Signing of Graph Data on the Web</cite></a>. Andreas Kasten; Ansgar Scherp; Peter Schauß.  European Semantic Web Conference — ESWC 2014, Springer Verlag, pp.&nbsp;146-160. URL: <a href="https://link.springer.com/chapter/10.1007%2F978-3-319-07443-6_11">https://link.springer.com/chapter/10.1007%2F978-3-319-07443-6_11</a>
+    </dd><dt id="bib-n-quads">[n-quads]</dt><dd>
+      <a href="https://www.w3.org/TR/n-quads/"><cite>RDF 1.1 N-Quads</cite></a>. Gavin Carothers.  W3C. 25 February 2014. W3C Recommendation. URL: <a href="https://www.w3.org/TR/n-quads/">https://www.w3.org/TR/n-quads/</a>
+    </dd><dt id="bib-n-quads-20140225">[n-quads-20140225]</dt><dd>
+      <a href="https://www.w3.org/TR/2014/REC-n-quads-20140225/"><cite>RDF 1.1 N-Quads</cite></a>. Gavin Carothers.  W3C. 25 February 2014. W3C Recommendation. URL: <a href="https://www.w3.org/TR/2014/REC-n-quads-20140225/">https://www.w3.org/TR/2014/REC-n-quads-20140225/</a>
+    </dd><dt id="bib-n-triples-20140225">[n-triples-20140225]</dt><dd>
+      <a href="https://www.w3.org/TR/2014/REC-n-triples-20140225/"><cite>RDF 1.1 N-Triples</cite></a>. Gavin Carothers; Andy Seaborne.  W3C. 25 February 2014. W3C Recommendation. URL: <a href="https://www.w3.org/TR/2014/REC-n-triples-20140225/">https://www.w3.org/TR/2014/REC-n-triples-20140225/</a>
+    </dd><dt id="bib-rdf-canon">[rdf-canon]</dt><dd>
+      <a href="https://www.w3.org/TR/rdf-canon/"><cite>RDF Dataset Canonicalization</cite></a>. Dave Longley; Gregg Kellogg; Dan Yamamoto.  W3C. 4 October 2023. W3C Working Draft. URL: <a href="https://www.w3.org/TR/rdf-canon/">https://www.w3.org/TR/rdf-canon/</a>
+    </dd><dt id="bib-rdf11-concepts">[rdf11-concepts]</dt><dd>
+      <a href="https://www.w3.org/TR/rdf11-concepts/"><cite>RDF 1.1 Concepts and Abstract Syntax</cite></a>. Richard Cyganiak; David Wood; Markus Lanthaler.  W3C. 25 February 2014. W3C Recommendation. URL: <a href="https://www.w3.org/TR/rdf11-concepts/">https://www.w3.org/TR/rdf11-concepts/</a>
+    </dd><dt id="bib-rfc8259">[RFC8259]</dt><dd>
+      <a href="https://www.rfc-editor.org/rfc/rfc8259"><cite>The JavaScript Object Notation (JSON) Data Interchange Format</cite></a>. T. Bray, Ed..  IETF. December 2017. Internet Standard. URL: <a href="https://www.rfc-editor.org/rfc/rfc8259">https://www.rfc-editor.org/rfc/rfc8259</a>
+    </dd><dt id="bib-rfc8785">[rfc8785]</dt><dd>
+      <a href="https://www.rfc-editor.org/rfc/rfc8785"><cite>JSON Canonicalization Scheme (JCS)</cite></a>. A. Rundgren; B. Jordan; S. Erdtman.  IETF. June 2020. Informational. URL: <a href="https://www.rfc-editor.org/rfc/rfc8785">https://www.rfc-editor.org/rfc/rfc8785</a>
+    </dd><dt id="bib-xml-c14n11">[xml-c14n11]</dt><dd>
+      <a href="https://www.w3.org/TR/xml-c14n11/"><cite>Canonical XML Version 1.1</cite></a>. John Boyer; Glenn Marcy.  W3C. 2 May 2008. W3C Recommendation. URL: <a href="https://www.w3.org/TR/xml-c14n11/">https://www.w3.org/TR/xml-c14n11/</a>
+    </dd></dl>
+  </section></section><p role="navigation" id="back-to-top">
+    <a href="#title"><abbr title="Back to Top">↑</abbr></a>
+  </p><script id="respec-dfn-panel">(() => {
+// @ts-check
+if (document.respec) {
+  document.respec.ready.then(setupPanel);
+} else {
+  setupPanel();
+}
+
+function setupPanel() {
+  const listener = panelListener();
+  document.body.addEventListener("keydown", listener);
+  document.body.addEventListener("click", listener);
+}
+
+function panelListener() {
+  /** @type {HTMLElement} */
+  let panel = null;
+  return event => {
+    const { target, type } = event;
+
+    if (!(target instanceof HTMLElement)) return;
+
+    // For keys, we only care about Enter key to activate the panel
+    // otherwise it's activated via a click.
+    if (type === "keydown" && event.key !== "Enter") return;
+
+    const action = deriveAction(event);
+
+    switch (action) {
+      case "show": {
+        hidePanel(panel);
+        /** @type {HTMLElement} */
+        const dfn = target.closest("dfn, .index-term");
+        panel = document.getElementById(`dfn-panel-for-${dfn.id}`);
+        const coords = deriveCoordinates(event);
+        displayPanel(dfn, panel, coords);
+        break;
+      }
+      case "dock": {
+        panel.style.left = null;
+        panel.style.top = null;
+        panel.classList.add("docked");
+        break;
+      }
+      case "hide": {
+        hidePanel(panel);
+        panel = null;
+        break;
+      }
+    }
+  };
+}
+
+/**
+ * @param {MouseEvent|KeyboardEvent} event
+ */
+function deriveCoordinates(event) {
+  const target = /** @type HTMLElement */ (event.target);
+
+  // We prevent synthetic AT clicks from putting
+  // the dialog in a weird place. The AT events sometimes
+  // lack coordinates, so they have clientX/Y = 0
+  const rect = target.getBoundingClientRect();
+  if (
+    event instanceof MouseEvent &&
+    event.clientX >= rect.left &&
+    event.clientY >= rect.top
+  ) {
+    // The event probably happened inside the bounding rect...
+    return { x: event.clientX, y: event.clientY };
+  }
+
+  // Offset to the middle of the element
+  const x = rect.x + rect.width / 2;
+  // Placed at the bottom of the element
+  const y = rect.y + rect.height;
+  return { x, y };
+}
+
+/**
+ * @param {Event} event
+ */
+function deriveAction(event) {
+  const target = /** @type {HTMLElement} */ (event.target);
+  const hitALink = !!target.closest("a");
+  if (target.closest("dfn:not([data-cite]), .index-term")) {
+    return hitALink ? "none" : "show";
+  }
+  if (target.closest(".dfn-panel")) {
+    if (hitALink) {
+      return target.classList.contains("self-link") ? "hide" : "dock";
+    }
+    const panel = target.closest(".dfn-panel");
+    return panel.classList.contains("docked") ? "hide" : "none";
+  }
+  if (document.querySelector(".dfn-panel:not([hidden])")) {
+    return "hide";
+  }
+  return "none";
+}
+
+/**
+ * @param {HTMLElement} dfn
+ * @param {HTMLElement} panel
+ * @param {{ x: number, y: number }} clickPosition
+ */
+function displayPanel(dfn, panel, { x, y }) {
+  panel.hidden = false;
+  // distance (px) between edge of panel and the pointing triangle (caret)
+  const MARGIN = 20;
+
+  const dfnRects = dfn.getClientRects();
+  // Find the `top` offset when the `dfn` can be spread across multiple lines
+  let closestTop = 0;
+  let minDiff = Infinity;
+  for (const rect of dfnRects) {
+    const { top, bottom } = rect;
+    const diffFromClickY = Math.abs((top + bottom) / 2 - y);
+    if (diffFromClickY < minDiff) {
+      minDiff = diffFromClickY;
+      closestTop = top;
+    }
+  }
+
+  const top = window.scrollY + closestTop + dfnRects[0].height;
+  const left = x - MARGIN;
+  panel.style.left = `${left}px`;
+  panel.style.top = `${top}px`;
+
+  // Find if the panel is flowing out of the window
+  const panelRect = panel.getBoundingClientRect();
+  const SCREEN_WIDTH = Math.min(window.innerWidth, window.screen.width);
+  if (panelRect.right > SCREEN_WIDTH) {
+    const newLeft = Math.max(MARGIN, x + MARGIN - panelRect.width);
+    const newCaretOffset = left - newLeft;
+    panel.style.left = `${newLeft}px`;
+    /** @type {HTMLElement} */
+    const caret = panel.querySelector(".caret");
+    caret.style.left = `${newCaretOffset}px`;
+  }
+
+  // As it's a dialog, we trap focus.
+  // TODO: when <dialog> becomes a implemented, we should really
+  // use that.
+  trapFocus(panel, dfn);
+}
+
+/**
+ * @param {HTMLElement} panel
+ * @param {HTMLElement} dfn
+ * @returns
+ */
+function trapFocus(panel, dfn) {
+  /** @type NodeListOf<HTMLAnchorElement> elements */
+  const anchors = panel.querySelectorAll("a[href]");
+  // No need to trap focus
+  if (!anchors.length) return;
+
+  // Move focus to first anchor element
+  const first = anchors.item(0);
+  first.focus();
+
+  const trapListener = createTrapListener(anchors, panel, dfn);
+  panel.addEventListener("keydown", trapListener);
+
+  // Hiding the panel releases the trap
+  const mo = new MutationObserver(records => {
+    const [record] = records;
+    const target = /** @type HTMLElement */ (record.target);
+    if (target.hidden) {
+      panel.removeEventListener("keydown", trapListener);
+      mo.disconnect();
+    }
+  });
+  mo.observe(panel, { attributes: true, attributeFilter: ["hidden"] });
+}
+
+/**
+ *
+ * @param {NodeListOf<HTMLAnchorElement>} anchors
+ * @param {HTMLElement} panel
+ * @param {HTMLElement} dfn
+ * @returns
+ */
+function createTrapListener(anchors, panel, dfn) {
+  const lastIndex = anchors.length - 1;
+  let currentIndex = 0;
+  return event => {
+    switch (event.key) {
+      // Hitting "Tab" traps us in a nice loop around elements.
+      case "Tab": {
+        event.preventDefault();
+        currentIndex += event.shiftKey ? -1 : +1;
+        if (currentIndex < 0) {
+          currentIndex = lastIndex;
+        } else if (currentIndex > lastIndex) {
+          currentIndex = 0;
+        }
+        anchors.item(currentIndex).focus();
+        break;
+      }
+
+      // Hitting "Enter" on an anchor releases the trap.
+      case "Enter":
+        hidePanel(panel);
+        break;
+
+      // Hitting "Escape" returns focus to dfn.
+      case "Escape":
+        hidePanel(panel);
+        dfn.focus();
+        return;
+    }
+  };
+}
+
+/** @param {HTMLElement} panel */
+function hidePanel(panel) {
+  if (!panel) return;
+  panel.hidden = true;
+  panel.classList.remove("docked");
+}
+})()</script><script src="https://www.w3.org/scripts/TR/2021/fixup.js"></script></body></html>
